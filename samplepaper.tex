@@ -4,7 +4,11 @@
 %
 \documentclass[runningheads]{llncs}
 %
-\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[T1,T5]{fontenc}
+\usepackage[english,vietnamese]{babel}
+\usepackage{amsmath,amssymb}
+\usepackage{float}
 % T1 fonts will be used to generate the final print and online PDFs,
 % so please use T1 fonts in your manuscript whenever possible.
 % Other font encondings may result in incorrect characters.
@@ -12,6 +16,15 @@
 \usepackage{graphicx}
 % Used for displaying a sample figure. If possible, figure files should
 % be included in EPS format.
+% Keep compilation usable when optional experiment figures are not checked out.
+\let\originalincludegraphics\includegraphics
+\renewcommand{\includegraphics}[2][]{%
+  \IfFileExists{#2}{%
+    \originalincludegraphics[#1]{#2}%
+  }{%
+    \fbox{\small Missing image: \texttt{\detokenize{#2}}}%
+  }%
+}
 %
 % If you use the hyperref package, please uncomment the following two lines
 % to display URLs in blue roman font according to Springer's eBook style:
@@ -73,28 +86,8 @@ The abstract should briefly summarize the contents of the paper in
 % Paper organization: Cấu trúc paper gồm các phần: ...
 
 %
-%
-\section{Technical Background}
-\include{2-Techical-background/problem-statement}
-%
-% \subsection{Problem Definition}
-%
-% Mô hình hóa bài toán hoạch định bài toán chuyển động
-
-%
-%
-\section{Convex Decomposition Methods}
-%
-\subsection{ACD}
-%
-
-%
-\subsection{IRIS}
-%
-
-%
-\subsection{VCC}
-%
+% Technical background and convex-decomposition methods.
+\include{2-Techical-background/vi-technical-background}
 
 %
 \section{Integrated Framework GCS-Bézier for Motion Planning}
@@ -209,4 +202,3 @@ The abstract should briefly summarize the contents of the paper in
 % LNCS Homepage, \url{http://www.springer.com/lncs}, last accessed 2023/10/25
 % \end{thebibliography}
 \end{document}
-
