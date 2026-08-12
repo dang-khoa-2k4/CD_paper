@@ -1,0 +1,155 @@
+\subsection{Region Graph and B\'ezier Trajectory Model}
+\label{sec:gcs-bezier-model}
+
+The planner takes as input the collision-free convex cover
+$\mathcal{Q}=\{Q_v\}$ constructed by either ACD or VCC.  Each region is
+represented by a vertex in a directed graph $G=(V,E)$; an edge $(u,v)$ denotes
+a feasible transition between two adjacent regions.  Source and target vertices,
+denoted by $\sigma$ and $\tau$, encode the prescribed configurations
+$\mathbf{x}_{\mathrm{start}}$ and $\mathbf{x}_{\mathrm{goal}}$, respectively.
+Thus, the discrete part of the problem is to select an $\sigma$--$\tau$ path,
+while the continuous part determines the trajectory inside the regions on that
+path.
+
+For a region $Q_v\subset\mathbb{R}^{n_c}$, the local trajectory is an
+order-$d$ B\'ezier curve
+\begin{equation}
+  \mathbf{q}_v(s)
+  =\sum_{k=0}^{d}B_{k,d}(s)\,\mathbf{r}_{v,k},
+  \qquad s\in[0,1],
+  \label{eq:framework-bezier-curve}
+\end{equation}
+where $\mathbf{r}_{v,k}\in\mathbb{R}^{n_c}$ are spatial control points and
+$B_{k,d}$ are the Bernstein basis functions.  A second B\'ezier curve
+$t_v(s)=\sum_{k=0}^{d}B_{k,d}(s)h_{v,k}$ parametrizes time.  The local decision
+variable is consequently
+\[
+  x_v=(\mathbf{r}_{v,0},\ldots,\mathbf{r}_{v,d},
+       h_{v,0},\ldots,h_{v,d}).
+\]
+
+The convex-hull property is the key reason for this representation: if every
+control point belongs to the convex, collision-free region $Q_v$, the complete
+curve belongs to $Q_v$.  In particular, when
+$Q_v=\{\mathbf{q}\mid A_v\mathbf{q}\leq b_v\}$, continuous-time collision
+avoidance is certified by the finite set of linear constraints
+\begin{equation}
+  A_v\mathbf{r}_{v,k}\leq b_v,\qquad k=0,\ldots,d.
+  \label{eq:framework-containment}
+\end{equation}
+This converts continuous-time collision avoidance into finitely many convex
+constraints~\cite{MarcucciEtAl2023MotionPlanning}.
+The timing and velocity constraints are written in convex perspective form:
+\begin{equation}
+  \Delta h_{v,k}\geq\varepsilon,\qquad
+  \Delta\mathbf{r}_{v,k}\in\Delta h_{v,k}D,\qquad k=0,\ldots,d-1,
+  \label{eq:framework-kinematics}
+\end{equation}
+where $\Delta\mathbf{r}_{v,k}=\mathbf{r}_{v,k+1}-\mathbf{r}_{v,k}$,
+$\Delta h_{v,k}=h_{v,k+1}-h_{v,k}$, $\varepsilon>0$ prevents a degenerate time
+scaling, and $D$ is a convex velocity set.  For each selected edge
+$(u,v)$, position and time are joined through
+\begin{equation}
+  \mathbf{r}_{u,d}=\mathbf{r}_{v,0},
+  \qquad h_{u,d}=h_{v,0}.
+  \label{eq:framework-c0-continuity}
+\end{equation}
+Together with Eq.~\eqref{eq:framework-containment}, this places the shared
+endpoint in $Q_u\cap Q_v$.
+Higher-order continuity constraints can be included in the edge model when a
+particular application requires them.
+
+\subsection{Perspective GCS Formulation}
+\label{sec:perspective-gcs}
+
+Let $\mathcal{X}_v$ collect the local constraints in
+Eqs.~\eqref{eq:framework-containment}--\eqref{eq:framework-kinematics}, and let
+$\mathcal{X}_e$ collect the compatibility constraints for edge $e=(u,v)$.  GCS
+uses a binary flow variable $y_e$ to indicate whether an edge is selected.
+Rather than multiplying $y_e$ by the continuous variables directly, the
+perspective formulation introduces edge-local copies $z_{e,u}$ and $z_{e,v}$.
+For a convex edge cost $\ell_e$, its closed perspective is
+\begin{equation}
+  \widetilde{\ell}_e((z_{e,u},z_{e,v}),y_e)
+  =y_e\,\ell_e\!\left(\frac{z_{e,u}}{y_e},
+                       \frac{z_{e,v}}{y_e}\right)
+  \quad \text{for } y_e>0,
+  \label{eq:framework-perspective-cost}
+\end{equation}
+with the usual closed extension at $y_e=0$.  This construction preserves
+convexity and switches the continuous variables and cost off when an edge is
+inactive~\cite{MarcucciEtAl2023GCS}.
+
+The resulting GCS--B\'ezier problem can be expressed compactly as
+\begin{equation}
+\begin{aligned}
+  \min_{y,z}\quad &
+    \sum_{e=(u,v)\in E}
+    \widetilde{\ell}_e((z_{e,u},z_{e,v}),y_e) \\
+  \text{s.t.}\quad &
+    \sum_{e\in\mathcal{E}^{+}(v)}y_e-
+    \sum_{e\in\mathcal{E}^{-}(v)}y_e=\delta_v,
+    && \forall v\in V,\\
+  &
+    \sum_{e\in\mathcal{E}^{-}(v)}z_{e,v}=
+    \sum_{e\in\mathcal{E}^{+}(v)}z_{e,v},
+    && \forall v\in V\setminus\{\sigma,\tau\},\\
+  &
+    z_{e,u}\in y_e\mathcal{X}_u,\quad
+    z_{e,v}\in y_e\mathcal{X}_v,\quad
+    (z_{e,u},z_{e,v})\in y_e\mathcal{X}_e,
+    && \forall e=(u,v)\in E,\\
+  & y_e\in\{0,1\},
+    && \forall e\in E .
+\end{aligned}
+\label{eq:framework-gcs-micp}
+\end{equation}
+Here, $\delta_\sigma=1$, $\delta_\tau=-1$, and $\delta_v=0$ otherwise.
+The first constraint selects an $\sigma$--$\tau$ path, while the second enforces
+state-flow consistency across adjacent local trajectories.  The source and
+target trajectory endpoints are fixed to the prescribed boundary configurations.
+Depending on the chosen convex costs and sets, this model is a mixed-integer
+convex program or a mixed-integer second-order cone program
+~\cite{MarcucciEtAl2023GCS,MarcucciEtAl2023MotionPlanning}.  It can combine
+convex penalties on path length, traversal time, and trajectory smoothness.
+
+\subsection{Convex Relaxation and Path Rounding}
+\label{sec:gcs-relaxation-rounding}
+
+Solving Eq.~\eqref{eq:framework-gcs-micp} to global optimality with
+branch-and-bound can be expensive when the region graph is large.  The scalable
+alternative used for the benchmark first relaxes the binary constraints to
+$0\leq y_e\leq1$ and solves the resulting convex problem.  Its optimum
+$C_{\mathrm{relax}}$ is a lower bound on the optimal mixed-integer cost
+$C_{\mathrm{opt}}$.
+
+The fractional flow is then converted to a valid discrete path by randomized
+rounding.  At a current vertex $u$, an admissible outgoing edge is sampled
+according to
+\begin{equation}
+  \Pr(e\mid u)
+  =\frac{y_e^\star}
+         {\sum_{e'\in\mathcal{E}^{+}(u)}y_{e'}^\star},
+  \qquad e\in\mathcal{E}^{+}(u),
+  \label{eq:framework-rounding}
+\end{equation}
+while excluding edges that would create a cycle.  Once a path reaches
+$\tau$, its edge variables are fixed and the continuous trajectory variables
+are re-optimized over that convex restriction.  The resulting feasible cost
+$C_{\mathrm{round}}$ satisfies
+\begin{equation}
+  C_{\mathrm{relax}}\leq C_{\mathrm{opt}}\leq C_{\mathrm{round}}.
+  \label{eq:framework-bounds}
+\end{equation}
+Accordingly, the reported relaxation--rounding gap
+\begin{equation}
+  g_{\mathrm{relax}}
+  =\frac{C_{\mathrm{round}}-C_{\mathrm{relax}}}
+         {C_{\mathrm{relax}}}
+  \label{eq:framework-relaxation-gap}
+\end{equation}
+is a computable upper bound on the unknown relative suboptimality whenever
+$C_{\mathrm{relax}}>0$.  A zero gap certifies optimality of the rounded
+solution; otherwise, branch-and-bound is required for an exact global
+certificate.  This distinction motivates reporting both graph size and
+relaxation--rounding behavior in the experimental analysis.

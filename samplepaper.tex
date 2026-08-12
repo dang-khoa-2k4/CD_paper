@@ -41,9 +41,9 @@
 \newcommand{\code}[1]{\texttt{#1}}
 \begin{document}
 %
-\title{Contribution Title}
+\title{The Impact of Convex Free-Space Decomposition on Graphs of Convex Sets for Motion Planning}
 %
-%\titlerunning{Abbreviated paper title}
+\titlerunning{Convex Decompositions for GCS--B\'ezier Planning}
 % If the paper title is too long for the running head, you can set
 % an abbreviated paper title here
 %
@@ -65,10 +65,30 @@ ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
 \maketitle              % typeset the header of the contribution
 %
 \begin{abstract}
-The abstract should briefly summarize the contents of the paper in
-150--250 words.
+Graphs of Convex Sets (GCS) coupled with B\'ezier trajectories provide a
+convex-optimization-based framework for collision-free motion planning, but
+their practical efficiency depends strongly on the convex cover of free space.
+This paper evaluates two automatic cover-construction methods---Approximate
+Convex Decomposition (ACD) and Visibility Clique Cover (VCC)---within an
+otherwise identical GCS--B\'ezier pipeline. We test five planar map families
+with five randomized instances per family and measure decomposition cost,
+graph and model size, planning time, robustness, and trajectory quality. ACD
+solves all 25 instances, whereas VCC solves 23, with both failures occurring
+in narrow passages. VCC can markedly reduce the downstream problem: on the
+\code{clustering} maps, median region and edge counts fall from 104 to 22 and
+from 462 to 99, respectively, reducing GCS solve time from 40.10~s to
+3.10~s. However, under the tested VCC sampling configuration, its higher
+decomposition cost makes ACD faster end-to-end on every map family. Across 48
+successful runs, edge count correlates more strongly with solve time than
+region count ($\rho=0.982$ versus $\rho=0.839$). VCC produces higher median
+minimum clearance in every successful family but does not uniformly improve
+path length or traversal time. These results show that edge structure---not
+region count alone---governs GCS difficulty: ACD is a robust single-query
+default, while VCC is attractive when its construction can be amortized or it
+substantially reduces connectivity.
 
-\keywords{First keyword  \and Second keyword \and Another keyword.}
+\keywords{Motion planning \and Graphs of Convex Sets \and B\'ezier trajectories
+\and convex free-space decomposition \and visibility clique cover}
 \end{abstract}
 %
 
@@ -130,8 +150,9 @@ and Section~5 concludes the paper and outlines future work.
 \input{2-Techical-background/vi-technical-background}
 
 %
-\section{Integrated Framework GCS-Bézier for Motion Planning}
-%
+\section{Integrated GCS--B\'ezier Framework for Motion Planning}
+\label{sec:gcs-bezier-framework}
+\input{3-Integrated-Framework-GCS/integrated-framework}
 
 %
 %

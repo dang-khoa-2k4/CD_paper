@@ -1,0 +1,131 @@
+\subsection{Nới lỏng lồi, làm tròn ngẫu nhiên và Branch-and-Bound trong GCS}
+\label{subsec:gcs_relaxation_rounding_bb}
+
+Bài toán GCS-Bézier đặt ra một thách thức tối ưu hóa hỗn hợp với hai tầng quyết định gắn kết chặt chẽ: tầng rời rạc lựa chọn đường đi trên đồ thị, và tầng liên tục tối ưu hóa hình dạng quỹ đạo trong các vùng lồi tương ứng.
+Sự kết hợp này dẫn đến một bài toán lập trình nguyên hỗn hợp lồi (MICP) mà trong thực tế có thể được tiếp cận theo hai hướng:
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}[
+        node distance=1.2cm and 1.8cm,
+        box/.style={
+            draw,
+            rounded corners,
+            align=left,
+            text width=5.8cm,
+            inner sep=8pt,
+            font=\small
+        },
+        main/.style={
+            draw,
+            rounded corners,
+            align=center,
+            text width=2.6cm,
+            inner sep=8pt,
+            font=\small\bfseries
+        },
+        arrow/.style={->, thick}
+    ]
+
+        \node[main] (micp) {MICP gốc};
+
+        \node[box, above right=0.4cm and 1.8cm of micp] (bb) {
+            \textbf{Branch-and-Bound (BB)}\\
+            Nới lỏng cục bộ tại mỗi nút cây\\[2pt]
+            $\Rightarrow$ Đảm bảo tối ưu toàn cục, nhưng có thể chậm.
+        };
+
+        \node[box, below right=0.4cm and 1.8cm of micp] (rr) {
+            \textbf{Nới lỏng lồi toàn bài}\\
+            Kết hợp làm tròn ngẫu nhiên\\[2pt]
+            $\Rightarrow$ Nghiệm khả thi nhanh.
+        };
+
+        \draw[arrow] (micp.east) -- (bb.west);
+        \draw[arrow] (micp.east) -- (rr.west);
+
+    \end{tikzpicture}
+
+    \caption{Hai hướng tiếp cận chính cho bài toán GCS-Bézier.}
+    \label{fig:gcs_solver_pipeline}
+\end{figure}
+
+Trong nhánh thứ nhất, BB không yêu cầu một bài toán nới lỏng toàn cục được giải trước; nới lỏng lồi được sử dụng \emph{cục bộ} tại từng nút của cây tìm kiếm để sinh cận dưới và hướng dẫn cắt tỉa.
+Trong nhánh thứ hai, bài toán nới lỏng lồi được giải \emph{một lần} cho toàn bộ đồ thị, và nghiệm phân số $y_e^\star \in [0,1]$ thu được dùng để lấy mẫu một đường đi rời rạc.
+Bài toán nới lỏng lồi trong nhánh này thu được bằng cách thay thế ràng buộc nhị phân trên biến cạnh
+\[
+    y_e \in \{0,1\}
+    \qquad \text{bởi} \qquad
+    y_e \in [0,1].
+\]
+Khi ràng buộc này được nới lỏng, miền khả thi của bài toán được mở rộng và bao trùm lên miền khả thi nguyên ban đầu.
+Do đó, với bài toán tối thiểu hóa, nếu ký hiệu $C_{\mathrm{relax}}$ là chi phí tối ưu của bài toán nới lỏng và $C_{\mathrm{opt}}$ là chi phí tối ưu toàn cục của MICP gốc, ta luôn có bất đẳng thức
+\begin{equation}
+    C_{\mathrm{relax}} \le C_{\mathrm{opt}}.
+    \label{eq:gcs_relax_lower_bound}
+\end{equation}
+Nói cách khác, nghiệm của bài toán nới lỏng cung cấp một cận dưới bảo đảm cho chi phí tối ưu thực sự của bài toán GCS-Bézier.
+
+\paragraph{Branch-and-Bound.}\mbox{}\\
+
+Branch-and-Bound là phương pháp giải chính xác tiêu chuẩn cho các bài toán lập trình nguyên hỗn hợp.
+Thuật toán xây dựng một cây tìm kiếm bằng cách phân nhánh trên các biến nguyên và tại mỗi nút của cây giải một bài toán nới lỏng lồi để thu được cận dưới cục bộ.
+Nếu cận dưới tại một nút vượt quá chi phí của nghiệm khả thi tốt nhất hiện có - thường được gọi là \emph{incumbent} - toàn bộ cây con bên dưới nút đó có thể bị loại bỏ mà không cần khám phá thêm.
+Ngược lại, nếu nghiệm của bài toán nới lỏng tại một nút đã thỏa mãn tính nguyên của các biến $y_e$, nghiệm đó tạo thành một nghiệm khả thi của MICP và có thể cập nhật incumbent.
+Thuật toán kết thúc khi toàn bộ cây tìm kiếm đã được duyệt hết, hoặc khi khoảng cách giữa cận dưới toàn cục và chi phí của incumbent nhỏ hơn một dung sai cho trước, qua đó cung cấp chứng nhận tối ưu toàn cục.
+Tuy nhiên, do bài toán đường đi ngắn nhất trong GCS là NP-hard~\cite{MarcucciEtAl2023GCS,Marcucci2024Thesis}, kích thước cây tìm kiếm có thể tăng theo hàm mũ trong các thể hiện khó, khiến chi phí tính toán trở nên không thực tiễn đối với các đồ thị quy mô lớn.
+
+\paragraph{Làm tròn ngẫu nhiên.}\mbox{}\\
+
+Một phương án hiệu quả hơn về mặt tính toán là giải bài toán nới lỏng lồi trước, sau đó khôi phục một đường đi rời rạc từ nghiệm phân số thu được.
+Trong GCS, các giá trị $y_e^\star \in [0,1]$ không thể được làm tròn độc lập cho từng cạnh, vì cách đó có thể vi phạm các ràng buộc bảo toàn luồng và sinh ra một tập cạnh không tạo thành đường đi hợp lệ.
+Thay vào đó, quá trình làm tròn được thực hiện tuần tự bằng cách khai thác cấu trúc đồ thị: tại đỉnh hiện tại $u$, xét tập các cạnh đi ra không tạo chu trình $\mathcal{E}_u$, và chọn cạnh $e = (u,v) \in \mathcal{E}_u$ theo phân phối xác suất
+\begin{equation}
+    \mathbb{P}(e)
+    =
+    \frac{y_e^\star}{\displaystyle\sum_{e' \in \mathcal{E}_u} y_{e'}^\star},
+    \label{eq:gcs_randomized_rounding_prob}
+\end{equation}
+trong đó tử số là trọng số nới lỏng của cạnh $e$ và mẫu số là tổng trọng số của tất cả các cạnh ứng viên tại $u$.
+Quá trình lấy mẫu này được lặp từ đỉnh nguồn $\sigma$ đến đỉnh đích $\tau$; nếu thuật toán gặp ngõ cụt, nó quay lui về đỉnh gần nhất còn cạnh ứng viên chưa được chọn.
+Sau khi thu được một đường đi $p$, các biến cạnh tương ứng được cố định và một bài toán lồi phụ trợ được giải để tối ưu hóa các biến liên tục của quỹ đạo trên đường đi đó.
+
+Nếu bước làm tròn và bài toán lồi phụ trợ đều khả thi, nghiệm thu được là một nghiệm khả thi hợp lệ của MICP gốc.
+Gọi $C_{\mathrm{round}}$ là chi phí của nghiệm này.
+Vì $C_{\mathrm{opt}}$ là chi phí nhỏ nhất trên toàn bộ miền khả thi nguyên, mọi nghiệm khả thi cụ thể đều cung cấp một cận trên:
+\begin{equation}
+    C_{\mathrm{opt}} \le C_{\mathrm{round}}.
+    \label{eq:gcs_round_upper_bound}
+\end{equation}
+Kết hợp~\eqref{eq:gcs_relax_lower_bound} và~\eqref{eq:gcs_round_upper_bound}, ta thu được quan hệ kẹp
+\begin{equation}
+    C_{\mathrm{relax}}
+    \le
+    C_{\mathrm{opt}}
+    \le
+    C_{\mathrm{round}}.
+    \label{eq:gcs_sandwich_bound}
+\end{equation}
+Đây là ý nghĩa cốt lõi của pipeline nới lỏng--làm tròn: bài toán nới lỏng lồi cung cấp một cận dưới bảo đảm, trong khi nghiệm sau làm tròn - nếu khả thi - cung cấp một cận trên.
+Tuy nhiên, giá trị chính xác của $C_{\mathrm{opt}}$ không thể được xác định trực tiếp từ hai cận này, trừ trường hợp đặc biệt $C_{\mathrm{relax}} = C_{\mathrm{round}}$: khi hai cận trùng nhau, nghiệm sau làm tròn đồng thời là nghiệm tối ưu toàn cục có chứng nhận.
+Khi hai cận còn cách nhau, randomized rounding chỉ cung cấp một nghiệm heuristic có bảo đảm cận, không thay thế vai trò chứng nhận của Branch-and-Bound.
+
+Từ~\eqref{eq:gcs_sandwich_bound}, với $C_{\mathrm{relax}} > 0$, khoảng cách tối ưu thực sự của nghiệm sau làm tròn, được định nghĩa là
+\[
+    \delta_{\mathrm{opt}}
+    :=
+    \frac{C_{\mathrm{round}} - C_{\mathrm{opt}}}{C_{\mathrm{opt}}},
+\]
+không thể tính trực tiếp khi $C_{\mathrm{opt}}$ chưa biết.
+Trong thực tế, người ta sử dụng cận trên bảo thủ
+\begin{equation}
+    \delta_{\mathrm{opt}}
+    \le
+    \frac{C_{\mathrm{round}} - C_{\mathrm{relax}}}{C_{\mathrm{relax}}}
+    =:
+    \delta_{\mathrm{relax}},
+    \label{eq:gcs_relax_gap_bound}
+\end{equation}
+trong đó $\delta_{\mathrm{relax}}$ được gọi là \emph{relaxation gap}.
+Đại lượng này là cận trên của optimality gap, không phải gap thực sự; khi hai cận nới lỏng và làm tròn còn cách xa nhau, $\delta_{\mathrm{relax}}$ có thể đáng kể ngay cả khi nghiệm sau làm tròn thực tế đã khá gần tối ưu.
+Để xác định chính xác $C_{\mathrm{opt}}$, về nguyên tắc phải giải MICP đến tối ưu toàn cục thông qua Branch-and-Bound, điều này làm nổi bật sự bổ trợ giữa hai nhánh của pipeline trong~Hình~\ref{fig:gcs_solver_pipeline}.
+Đây cũng là lý do các kết quả thực nghiệm của GCS-Bézier cần phân biệt rõ ràng giữa chi phí relaxation, chi phí sau rounding, và trạng thái bảo đảm tối ưu toàn cục.

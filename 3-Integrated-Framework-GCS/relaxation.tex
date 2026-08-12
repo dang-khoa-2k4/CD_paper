@@ -1,0 +1,117 @@
+\subsubsection{Xây dựng Bài toán Quy hoạch Lồi Nguyên Hỗn hợp thông qua Nới lỏng Phối cảnh}
+
+Việc giải quyết trực tiếp bài toán dưới dạng Quy hoạch Phi tuyến Nguyên Hỗn hợp (Mixed-Integer Nonlinear Programming - MINLP) đặt ra những thách thức tính toán đáng kể do sự hiện diện của các ràng buộc không lồi (non-convex constraints), đặc biệt là mối quan hệ song tuyến tính (bilinear relationship) giữa các biến quyết định nhị phân $y_e$ và các biến trạng thái liên tục $x_u$. Để khắc phục điều này và chuyển đổi bài toán sang dạng Quy hoạch Lồi Nguyên Hỗn hợp (Mixed-Integer Convex Programming - MICP) có thể giải quyết được, Marcucci và cộng sự~\cite{MarcucciEtAl2023GCS} đề xuất áp dụng kỹ thuật nới lỏng phối cảnh (perspective relaxation). Động lực chính của phương pháp này là cô lập tính không lồi bằng cách ``nâng'' (lifting) các biến liên tục vào một không gian có chiều cao hơn. Thay vì sử dụng các biến toàn cục $x_u$, kỹ thuật này giới thiệu các biến đại diện cục bộ (local proxy variables) $z_{e,u}, z_{e,v} \in \mathbb{R}^n$ cho mỗi cạnh $e=(u,v)$, đại diện cho sự đóng góp trạng thái của các đỉnh tương ứng khi cạnh đó được kích hoạt.
+
+Đối với mỗi cạnh $e=(u, v)$, các biến đại diện cục bộ $z_{e,u}$ và $z_{e,v}$ mô hình hóa cụ thể sự đóng góp của trạng thái tại các đỉnh $u$ và $v$ vào việc di chuyển qua cạnh $e$. Nếu cạnh không được kích hoạt (tức là $y_e=0$), các đóng góp này bị buộc về không. Mối quan hệ này được biểu diễn như sau:
+\[
+z_{e,u} \in y_e X_u \quad \text{và} \quad z_{e,v} \in y_e X_v
+\]
+điều này ngụ ý:
+\[\begin{cases}
+z_{e,u} \in X_u & \text{nếu } y_e = 1 \\
+z_{e,u} = 0 & \text{nếu } y_e = 0
+\end{cases}
+\]
+
+Logic này được hình thức hóa bằng cách sử dụng hàm phối cảnh (perspective function) $\tilde{\ell}_e((z_{e,u}, z_{e,v}), y_e)$, là phối cảnh của hàm chi phí gốc $\ell_e$. Một tính chất cơ bản trong giải tích lồi (convex analysis) phát biểu rằng nếu $\ell_e$ là lồi, thì phối cảnh $\tilde{\ell}_e$ của nó là lồi đồng thời (jointly convex) theo tất cả các đối số. Tính chất này rất quan trọng vì nó cho phép sử dụng các bộ giải lồi (convex solvers) hiệu quả. Hàm phối cảnh được định nghĩa là:
+\[
+\tilde{\ell}_e(z_{e,u}, z_{e,v}, y_e) = 
+\begin{cases} 
+y_e \ell_e\left(\frac{z_{e,u}}{y_e}, \frac{z_{e,v}}{y_e}\right) & \text{nếu } y_e > 0 \\
+0 & \text{nếu } y_e = 0 \text{ và } z_{e,u} = z_{e,v} = 0 \\
++\infty & \text{trường hợp khác}
+\end{cases}
+\]
+
+Quan trọng hơn, thay vì áp đặt các ràng buộc đẳng thức tường minh như $z_{e,u} = y_e x_u$, vốn không lồi, luật bảo toàn luồng (flow conservation law) chuẩn~\eqref{eq:flow_conservation} được mở rộng sang các biến liên tục. Điều này bắt buộc rằng đối với bất kỳ nút $u$ nào (ngoại trừ nguồn và đích), tổng các trạng thái liên tục đi vào nút thông qua các cạnh đến phải bằng tổng các trạng thái liên tục rời khỏi nút thông qua các cạnh đi.
+
+Công thức MICP kết quả cho Bài toán Đường đi Ngắn nhất trong GCS được định nghĩa như sau:
+
+\begin{subequations}
+\begin{align}
+\text{minimize} \quad & \sum_{e=(u,v) \in \mathcal{E}} \tilde{\ell}_e((z_{e,u}, z_{e,v}), y_e) \label{eq:gcs_obj_perspective} \\
+\text{subject to} \quad & \sum_{e \in \mathcal{E}^+(u)} y_e - \sum_{e \in \mathcal{E}^-(u)} y_e = \delta_u, \quad \forall u \in \mathcal{V} \label{eq:binary_flow} \\
+& \sum_{e \in \mathcal{E}^+(u)} z_{e,u} - \sum_{e \in \mathcal{E}^-(u)} z_{e,v} = 
+\begin{cases}
+x_s & \text{nếu } u = s \\
+-x_t & \text{nếu } u = t \\
+0 & \text{trường hợp khác}
+\end{cases}, \quad \forall u \in \mathcal{V} \label{eq:spatial_flow} \\
+& (z_{e,u}, z_{e,v}) \in y_e \mathcal{X}_e, \quad \forall e \in \mathcal{E} \label{eq:perspective_edge} \\
+& z_{e,u} \in y_e X_u, \quad z_{e,v} \in y_e X_v, \quad \forall e=(u,v) \in \mathcal{E} \label{eq:perspective_vertex} \\
+& y_e \in \{0, 1\}, \quad \forall e \in \mathcal{E} \label{eq:binary_constraint}
+\end{align}
+\end{subequations}
+
+Trong mô hình này, Phương trình~\eqref{eq:binary_flow} đảm bảo tính liên thông, trong đó $\delta_u$ được định nghĩa là $1$ cho nguồn, $-1$ cho đích, và $0$ cho các trường hợp khác. Phương trình~\eqref{eq:spatial_flow} đảm bảo rằng quỹ đạo liên tục là liền mạch trên cấu trúc đồ thị. Các phương trình~\eqref{eq:perspective_edge} và~\eqref{eq:perspective_vertex} thực thi sự bao hàm hình học (geometric containment) bên trong các tập lồi đã được tỉ lệ hóa; cụ thể, nếu $y_e=0$, các biến liên tục liên quan bị ràng buộc về gốc tọa độ, phát sinh chi phí bằng không. Công thức này cung cấp một sự nới lỏng chặt chẽ và hiệu quả về mặt tính toán, cho phép bộ giải xác định các quỹ đạo tối ưu gần toàn cục (near-global optimal) thỏa mãn cả đồ thị rời rạc và các ràng buộc liên tục phức tạp vốn có trong lập kế hoạch chuyển động.
+
+\subsubsection{Lồi hóa Bài toán GCS thông qua Kỹ thuật RLT}
+
+Để giải quyết tính không lồi vốn có của Chương trình Phi lồi Nguyên Hỗn hợp (Mixed-Integer Non-Convex Program - MINCP) ban đầu—cụ thể là các ràng buộc song tuyến tính liên kết các biến quyết định nhị phân với các biến trạng thái liên tục—Marcucci và cộng sự~\cite{MarcucciEtAl2023GCS} sử dụng chiến lược lồi hóa (convexification strategy) dựa trên Kỹ thuật Cải biến-Tuyến tính hóa (Reformulation-Linearization Technique - RLT) cấp một. Mục tiêu cơ bản của phương pháp này là thay thế các ràng buộc khó giải bằng các bao lồi chặt chẽ. Điều này đảm bảo rằng Chương trình Lồi Nguyên Hỗn hợp (MICP) kết quả bảo toàn tập khả thi nguyên của bài toán gốc đồng thời cung cấp các cận dưới mạnh khi các ràng buộc nguyên được nới lỏng.
+
+\paragraph{Cơ sở Lý thuyết: Tính Đối ngẫu giữa Nón Phối cảnh và Bất đẳng thức Hợp lệ}\mbox{}\\
+
+Trước khi đi vào chi tiết mô hình tối ưu hóa, chúng ta phải thiết lập mối liên hệ toán học giữa các nón phối cảnh (perspective cones) và các bất đẳng thức tuyến tính. Xét nón đối ngẫu (dual cone) của nón phối cảnh $\tilde{X}$, ký hiệu là $(\tilde{X})^*$. Nón này được định nghĩa là tập hợp các vectơ $(a, b)$ trong không gian mở rộng sao cho tích vô hướng của chúng với mọi phần tử trong nón $\tilde{X}$ là không âm:
+\begin{equation}
+    (\tilde{X})^* := \left\{ (a, b) \in \mathbb{R}^{n+1} \mid (a, b)^\top k \ge 0, \quad \forall k \in \tilde{X} \right\}.
+\end{equation}
+
+Một kết quả quan trọng được sử dụng trong công thức này là sự tương đương giữa nón đối ngẫu $(\tilde{X})^*$ và tập hợp các bất đẳng thức tuyến tính hợp lệ (valid linear inequalities) cho tập $X$. Về mặt hình học, điều này đại diện cho giao của tất cả các nửa không gian đóng (closed half-spaces) chứa $X$. Mối liên hệ này được hình thức hóa trong mệnh đề sau:
+
+\textbf{Mệnh đề.} Nón đối ngẫu $(\tilde{X})^*$ chính xác là tập hợp các hệ số $(a, b)$ xác định các bất đẳng thức tuyến tính hợp lệ trên tập $X$; nghĩa là, $(\tilde{X})^* \equiv X^\circ$.
+
+\textit{Chứng minh.}
+Để chứng minh điều này, xét một phần tử tùy ý $k \in \tilde{X}$. Theo định nghĩa của nón phối cảnh, $k$ có thể được biểu diễn dưới dạng $k = (\lambda x, \lambda)$ với một $x \in X$ nào đó và một vô hướng $\lambda \ge 0$. Điều kiện để một cặp vectơ $(a, b)$ thuộc về nón đối ngẫu $(\tilde{X})^*$ có thể được khai triển như sau:
+\begin{align}
+    (a, b) \in (\tilde{X})^* &\iff (a, b)^\top (\lambda x, \lambda) \ge 0, \quad \forall x \in X, \forall \lambda \ge 0 \nonumber \\
+    &\iff \lambda (a^\top x + b) \ge 0, \quad \forall x \in X, \forall \lambda \ge 0.
+\end{align}
+Quan sát thấy rằng bất đẳng thức cuối cùng phải thỏa mãn với mọi giá trị không âm của $\lambda$. Trong trường hợp $\lambda > 0$, ta có thể chia cả hai vế cho $\lambda$ mà không làm thay đổi dấu bất đẳng thức, thu được điều kiện $a^\top x + b \ge 0$. Trường hợp $\lambda = 0$ được thỏa mãn một cách hiển nhiên. Do đó, điều kiện cần và đủ để $(a, b) \in (\tilde{X})^*$ là biểu thức tuyến tính $a^\top x + b$ vẫn không âm trên toàn bộ tập $X$. Điều này xác nhận rằng $(\tilde{X})^*$ cấu thành tập hợp các hệ số cho tất cả các bất đẳng thức hợp lệ trên $X$, hoàn tất chứng minh.
+
+\paragraph{Xây dựng các Ràng buộc Lồi}\mbox{}\\
+
+Tận dụng mệnh đề trên, chúng ta có thể ``nâng'' bất kỳ ràng buộc tuyến tính hợp lệ nào từ không gian biến luồng (flow variable space) vào không gian hỗn hợp trạng thái-luồng (mixed state-flow space). Xét một đỉnh $v$ tùy ý và một bất đẳng thức tuyến tính hợp lệ liên quan đến các biến luồng $y_e$ kề với $v$, được cho bởi:
+\begin{equation}
+    \sum_{e \in E_v} c_e y_e + d \ge 0, \label{eq:valid_ineq}
+\end{equation}
+trong đó $E_v$ biểu thị tập hợp các cạnh kề với $v$, và $d$ là một hằng số phụ thuộc vào bài toán. Bằng cách áp dụng nguyên lý phối cảnh, bất đẳng thức~\eqref{eq:valid_ineq} được chuyển đổi thành một ràng buộc bên trong nón lồi $\tilde{X}_v$. Để tạo thuận lợi cho việc này, các biến đại diện $z_e$ và $z'_e$ được giới thiệu. Biến $z_e$ đại diện cho sự đóng góp trạng thái tại đỉnh nguồn của cạnh $e$ khi được kích hoạt, trong khi $z'_e$ đại diện cho sự đóng góp trạng thái tại đỉnh đích.
+
+Sự chuyển đổi này mang lại ràng buộc nón lồi sau:
+\begin{equation}
+    \left( \sum_{e \in E_{\text{in}}(v)} c_e z'_e + \sum_{e \in E_{\text{out}}(v)} c_e z_e + d x_v, \quad \sum_{e \in E_v} c_e y_e + d \right) \in \tilde{X}_v. \label{eq:lifted_constraint}
+\end{equation}
+
+Phương trình~\eqref{eq:lifted_constraint} ràng buộc mối quan hệ giữa các biến trạng thái trung gian ($z, z'$) và các biến luồng $y$, đảm bảo chúng nằm trong nón phối cảnh của tập khả thi $X_v$.
+
+Một ứng dụng cụ thể nhưng quan trọng của Mệnh đề trên liên quan đến ràng buộc không âm của luồng, tức là $y_e \ge 0$. Đối với một cạnh $e=(u, v)$:
+\begin{itemize}
+    \item Tại đỉnh nguồn $u$, áp dụng việc nâng với $c_e=1$ mang lại ràng buộc $(z_e, y_e) \in \tilde{X}_u$.
+    \item Tại đỉnh đích $v$, áp dụng việc nâng với $c_e=1$ mang lại ràng buộc $(z'_e, y_e) \in \tilde{X}_v$.
+\end{itemize}
+Các ràng buộc này hoạt động hiệu quả như một cơ chế ``bật/tắt'': nếu $y_e=1$, biến đại diện $z_e$ bị ràng buộc vào tập $X_u$; ngược lại, nếu $y_e=0$, $z_e$ bị buộc về gốc tọa độ.
+
+\paragraph{Công thức MICP Hoàn chỉnh}\mbox{}\\
+
+Tổng hợp các phân tích trước đó, Marcucci và cộng sự~\cite{MarcucciEtAl2023GCS} đề xuất công thức Quy hoạch Lồi Nguyên Hỗn hợp (MICP) hoàn chỉnh cho Bài toán Đường đi Ngắn nhất trên GCS, được phát biểu chính thức trong Định lý~5.7 của~\cite{MarcucciEtAl2023GCS}. Mô hình này loại bỏ hoàn toàn các thành phần song tuyến tính, thay thế chúng bằng các ràng buộc nón lồi:
+
+\begin{subequations}\label{eq:micp_formulation}
+\begin{align}
+  \underset{y, z, z'}{\text{minimize}} \quad & \sum_{e \in E} \tilde{\ell}_e((z_e, z'_e), y_e) \label{eq:micp_obj} \\
+  \text{subject to} \quad & \sum_{e \in E_{\text{out}}(s)} y_e = 1, \quad \sum_{e \in E_{\text{in}}(t)} y_e = 1, \label{eq:micp_flow_st} \\
+  & \sum_{e \in E_{\text{out}}(v)} y_e \le 1, \quad \forall v \in V \setminus \{s, t\}, \label{eq:micp_flow_int} \\
+  & \sum_{e \in E_{\text{in}}(v)} (z'_e, y_e) = \sum_{e \in E_{\text{out}}(v)} (z_e, y_e), \quad \forall v \in V \setminus \{s, t\}, \label{eq:micp_spatial} \\
+  & (z_e, y_e) \in \tilde{X}_u, \quad (z'_e, y_e) \in \tilde{X}_v, \quad \forall e = (u, v) \in E, \label{eq:micp_cone} \\
+  & y_e \in \{0, 1\}, \quad \forall e \in E. \label{eq:micp_binary}
+\end{align}
+\end{subequations}
+
+Công thức~\eqref{eq:micp_formulation} bao gồm bốn thành phần chính đảm bảo tính liên thông đồ thị và tính nhất quán hình học.
+
+Thứ nhất, hàm mục tiêu~\eqref{eq:micp_obj} đại diện cho tổng chi phí trên tất cả các cạnh, trong đó $\tilde{\ell}_e$ là hàm phối cảnh của thước đo chi phí gốc. Vì các phép toán phối cảnh bảo toàn tính lồi, bài toán tối ưu hóa duy trì được cấu trúc lồi có thể giải quyết được.
+
+Thứ hai, các ràng buộc~\eqref{eq:micp_flow_st} và~\eqref{eq:micp_flow_int} thực thi bảo toàn luồng cổ điển, đảm bảo sự tồn tại của một đường đi từ nguồn $s$ đến đích $t$ trong khi hạn chế mỗi đỉnh trung gian chỉ được ghé thăm tối đa một lần.
+
+Thứ ba, ràng buộc~\eqref{eq:micp_spatial} đại diện cho bảo toàn luồng không gian (spatial flow conservation), một đặc điểm khác biệt so với các bài toán đường đi ngắn nhất tiêu chuẩn. Ràng buộc này được suy ra bằng cách nhân phương trình bảo toàn luồng tại đỉnh $v$ với biến trạng thái $x_v$. Về mặt vật lý, nó đảm bảo tính liên tục của quỹ đạo: trạng thái tổng hợp ``đi vào'' đỉnh $v$ (thông qua $z'_e$) phải bằng trạng thái tổng hợp ``rời khỏi'' đỉnh $v$ (thông qua $z_e$).
+
+Cuối cùng, các ràng buộc~\eqref{eq:micp_cone} là kết quả của quá trình lồi hóa đã thảo luận trước đó. Chúng đóng vai trò là các bao lồi cho các biến đại diện $z_e$ và $z'_e$, đảm bảo rằng khi một cạnh $e=(u,v)$ được chọn ($y_e=1$), các biến này tương ứng với các điểm hợp lệ nằm trong các tập $X_u$ và $X_v$.
+
