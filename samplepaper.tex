@@ -19,6 +19,12 @@
 %\renewcommand\UrlFont{\color{blue}\rmfamily}
 %\urlstyle{rm}
 %
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\newcommand{\code}[1]{\texttt{#1}}
 \begin{document}
 %
 \title{Contribution Title}
@@ -69,18 +75,11 @@ The abstract should briefly summarize the contents of the paper in
 %
 %
 \section{Technical Background}
+\include{2-Techical-background/problem-statement}
 %
-\subsection{Problem Definition}
+% \subsection{Problem Definition}
 %
 % Mô hình hóa bài toán hoạch định bài toán chuyển động
-
-%
-\subsection{GCS}
-% 
-
-%
-\subsection{Motion Planning with Bézier Curves}
-% 
 
 %
 %
@@ -98,7 +97,6 @@ The abstract should briefly summarize the contents of the paper in
 %
 
 %
-%
 \section{Integrated Framework GCS-Bézier for Motion Planning}
 %
 
@@ -106,6 +104,7 @@ The abstract should briefly summarize the contents of the paper in
 %
 \section{Experimental Results and Discussion}
 %
+\input{5-Experimental-results/experimental-results-and-discussion}
 
 %
 %
@@ -117,62 +116,62 @@ The abstract should briefly summarize the contents of the paper in
 
 % \paragraph{Sample Heading (Fourth Level)} The contribution should contain no more than four levels of headings. 
 
-Table~\ref{tab1} gives a summary of all heading levels.
+% Table~\ref{tab1} gives a summary of all heading levels.
 
-\begin{table}
-\caption{Table captions should be placed above the tables.} 
-\label{tab1}
-\begin{tabular}{|l|l|l|}
-    \hline
-    Heading level &  Example & Font size and style\\
-    \hline
-    Title (centered) &  {\Large\bfseries Lecture Notes} & 14 point, bold\\
-    1st-level heading &  {\large\bfseries 1 Introduction} & 12 point, bold\\
-    2nd-level heading & {\bfseries 2.1 Printing Area} & 10 point, bold\\
-    3rd-level heading & {\bfseries Run-in Heading in Bold.} Text follows & 10 point, bold\\
-    4th-level heading & {\itshape Lowest Level Heading.} Text follows & 10 point, italic\\
-    \hline
-\end{tabular}
-\end{table}
+% \begin{table}
+% \caption{Table captions should be placed above the tables.} 
+% \label{tab1}
+% \begin{tabular}{|l|l|l|}
+%     \hline
+%     Heading level &  Example & Font size and style\\
+%     \hline
+%     Title (centered) &  {\Large\bfseries Lecture Notes} & 14 point, bold\\
+%     1st-level heading &  {\large\bfseries 1 Introduction} & 12 point, bold\\
+%     2nd-level heading & {\bfseries 2.1 Printing Area} & 10 point, bold\\
+%     3rd-level heading & {\bfseries Run-in Heading in Bold.} Text follows & 10 point, bold\\
+%     4th-level heading & {\itshape Lowest Level Heading.} Text follows & 10 point, italic\\
+%     \hline
+% \end{tabular}
+% \end{table}
 
-\noindent Displayed equations are centered and set on a separate line.
+% \noindent Displayed equations are centered and set on a separate line.
 
-\begin{equation}
-    x + y = z
-\end{equation}
+% \begin{equation}
+%     x + y = z
+% \end{equation}
 
-Please try to avoid rasterized images for line-art diagrams and
-schemas. Whenever possible, use vector graphics instead (see
-Fig.~\ref{fig1}).
+% Please try to avoid rasterized images for line-art diagrams and
+% schemas. Whenever possible, use vector graphics instead (see
+% Fig.~\ref{fig1}).
 
-\begin{figure}
-    \includegraphics[width=\textwidth]{fig1.eps}
-    \caption{A figure caption is always placed below the illustration. Please note that short captions are centered, while long ones are justified by the macro package automatically.} 
-    \label{fig1}
-\end{figure}
+% \begin{figure}
+%     \includegraphics[width=\textwidth]{fig1.eps}
+%     \caption{A figure caption is always placed below the illustration. Please note that short captions are centered, while long ones are justified by the macro package automatically.} 
+%     \label{fig1}
+% \end{figure}
 
-\begin{theorem}
-This is a sample theorem. The run-in heading is set in bold, while
-the following text appears in italics. Definitions, lemmas,
-propositions, and corollaries are styled the same way.
-\end{theorem}
+% \begin{theorem}
+% This is a sample theorem. The run-in heading is set in bold, while
+% the following text appears in italics. Definitions, lemmas,
+% propositions, and corollaries are styled the same way.
+% \end{theorem}
 %
 % the environments 'definition', 'lemma', 'proposition', 'corollary',
 % 'remark', and 'example' are defined in the LLNCS documentclass as well.
 %
-\begin{proof}
-Proofs, examples, and remarks have the initial word in italics,
-while the following text appears in normal font.
-\end{proof}
-For citations of references, we prefer the use of square brackets
-and consecutive numbers. Citations using labels or the author/year
-convention are also acceptable. The following bibliography provides
-a sample reference list with entries for journal
-articles~\cite{ref_article1}, an LNCS chapter~\cite{ref_lncs1}, a
-book~\cite{ref_book1}, proceedings without editors~\cite{ref_proc1},
-and a homepage~\cite{ref_url1}. Multiple citations are grouped
-\cite{ref_article1,ref_lncs1,ref_book1},
-\cite{ref_article1,ref_book1,ref_proc1,ref_url1}.
+% \begin{proof}
+% Proofs, examples, and remarks have the initial word in italics,
+% while the following text appears in normal font.
+% \end{proof}
+% For citations of references, we prefer the use of square brackets
+% and consecutive numbers. Citations using labels or the author/year
+% convention are also acceptable. The following bibliography provides
+% a sample reference list with entries for journal
+% articles~\cite{ref_article1}, an LNCS chapter~\cite{ref_lncs1}, a
+% book~\cite{ref_book1}, proceedings without editors~\cite{ref_proc1},
+% and a homepage~\cite{ref_url1}. Multiple citations are grouped
+% \cite{ref_article1,ref_lncs1,ref_book1},
+% \cite{ref_article1,ref_book1,ref_proc1,ref_url1}.
 
 %
 %
@@ -186,27 +185,28 @@ and a homepage~\cite{ref_url1}. Multiple citations are grouped
 % BibTeX users should specify bibliography style 'splncs04'.
 % References will then be sorted and formatted in the correct style.
 %
-% \bibliographystyle{splncs04}
-% \bibliography{mybibliography}
-%
-\begin{thebibliography}{8}
-\bibitem{ref_article1}
-Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
+\bibliographystyle{splncs04}
+\bibliography{mybibliography}
+% %
+% \begin{thebibliography}{8}
+% \bibitem{ref_article1}
+% Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
 
-\bibitem{ref_lncs1}
-Author, F., Author, S.: Title of a proceedings paper. In: Editor,
-F., Editor, S. (eds.) CONFERENCE 2016, LNCS, vol. 9999, pp. 1--13.
-Springer, Heidelberg (2016). \doi{10.10007/1234567890}
+% \bibitem{ref_lncs1}
+% Author, F., Author, S.: Title of a proceedings paper. In: Editor,
+% F., Editor, S. (eds.) CONFERENCE 2016, LNCS, vol. 9999, pp. 1--13.
+% Springer, Heidelberg (2016). \doi{10.10007/1234567890}
 
-\bibitem{ref_book1}
-Author, F., Author, S., Author, T.: Book title. 2nd edn. Publisher,
-Location (1999)
+% \bibitem{ref_book1}
+% Author, F., Author, S., Author, T.: Book title. 2nd edn. Publisher,
+% Location (1999)
 
-\bibitem{ref_proc1}
-Author, A.-B.: Contribution title. In: 9th International Proceedings
-on Proceedings, pp. 1--2. Publisher, Location (2010)
+% \bibitem{ref_proc1}
+% Author, A.-B.: Contribution title. In: 9th International Proceedings
+% on Proceedings, pp. 1--2. Publisher, Location (2010)
 
-\bibitem{ref_url1}
-LNCS Homepage, \url{http://www.springer.com/lncs}, last accessed 2023/10/25
-\end{thebibliography}
+% \bibitem{ref_url1}
+% LNCS Homepage, \url{http://www.springer.com/lncs}, last accessed 2023/10/25
+% \end{thebibliography}
 \end{document}
+

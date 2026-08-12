@@ -1,0 +1,97 @@
+\subsection{Benchmark Overview}
+The benchmark evaluates two automatic free-space decomposition methods, Approximate Convex Decomposition (ACD) and Visibility Clique Cover (VCC), inside the same GCS--Bezier motion-planning pipeline. Five map families are used: \code{clustering}, \code{narrows}, \code{rooms}, \code{u\_shaped}, and \code{flappy}. Each family is generated with five seeds under the same workspace scale, obstacle density, obstacle size, and start--goal configuration, giving 50 paired runs in total.
+
+ACD solved all 25 instances. VCC solved 23 out of 25 instances; both failures occurred on the \code{narrows} family, at seeds 2 and 3. The failed VCC diagnostics still reported moderate graph sizes before termination: 11 vertices and 26 edges for seed 2, and 15 vertices and 57 edges for seed 3. Thus, failure is not explained only by graph size. The more likely cause is the interaction between visibility sampling, coverage requirements, start--goal connectivity, and the narrow-gateway geometry.
+
+\subsection{Model Size and Runtime}
+Table~\ref{tab:exp-runtime} summarizes the main model-size and timing metrics. Each entry is the median over successful seeds. For VCC on \code{narrows}, the statistics are computed over the three successful runs, while the success rate remains reported as 3/5.
+
+\begin{table}[htbp]
+\caption{Median model size and runtime by map family. Time is measured in seconds.}
+\label{tab:exp-runtime}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.2pt}
+\begin{tabular}{@{}llrrrrrr@{}}
+\toprule
+Map & Method & Success & $N_R$ & $N_E$ & $t_{\rm dec}$ & $t_{\rm GCS}$ & $t_{\rm dec}+t_{\rm GCS}$ \\
+\midrule
+Clustering & ACD & 5/5 & 104 & 462 & 7.73 & 40.10 & 59.30 \\
+           & VCC & 5/5 & 22  & 99  & 85.80 & 3.10 & 88.80 \\
+Narrows    & ACD & 5/5 & 13  & 40  & 0.68 & 0.83 & 1.52 \\
+           & VCC & 3/5 & 11  & 50  & 13.10 & 0.73 & 13.80 \\
+Rooms      & ACD & 5/5 & 15  & 38  & 0.78 & 0.50 & 1.28 \\
+           & VCC & 5/5 & 13  & 57  & 15.30 & 1.33 & 18.90 \\
+U-shaped   & ACD & 5/5 & 25  & 86  & 1.29 & 2.77 & 4.07 \\
+           & VCC & 5/5 & 16  & 89  & 16.30 & 1.93 & 18.30 \\
+Flappy     & ACD & 5/5 & 13  & 26  & 0.98 & 0.16 & 1.13 \\
+           & VCC & 5/5 & 13  & 28  & 12.80 & 0.16 & 12.90 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+VCC is most effective on the \code{clustering} maps. It reduces the median number of regions from 104 to 22, the number of GCS edges from 462 to 99, and the GCS wall time from 40.10 s to 3.10 s. This confirms that visibility-based grouping can substantially reduce the downstream optimization burden when the free space contains many locally redundant convex pieces.
+
+The same conclusion does not hold uniformly across all map families. On \code{u\_shaped}, VCC reduces the number of regions from 25 to 16, but the median edge count is essentially unchanged. On \code{rooms}, VCC has an outlier with 33 regions, 430 edges, and a GCS wall time of 105 s. These cases show that the edge structure of the GCS graph matters as much as the number of convex regions.
+
+When decomposition time is included, ACD is faster in all five map families under the tested configuration. The VCC setup uses 500 samples and a target coverage of 0.96, making its decomposition cost much larger than that of ACD. Even for \code{clustering}, where VCC reduces GCS solve time by roughly one order of magnitude, its median decomposition time of 85.80 s makes the end-to-end runtime higher than ACD. VCC is therefore more attractive when the same decomposition can be reused for many planning queries; ACD is preferable for one-shot planning in this benchmark.
+
+\subsection{Correlation Between Model Size and Solve Time}
+Figure~\ref{fig:exp-correlations} shows the relationship between model-size indicators and solve time over the 48 successful runs. The strongest Spearman correlations with \code{SolvePath} time are obtained by the presolved model size: $\rho=0.986$ for the number of presolved variables and $\rho=0.983$ for the number of presolved constraints. Among graph-level quantities available before solver construction, the number of edges is more predictive than the number of vertices, with $\rho=0.982$ compared with $\rho=0.839$.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{5-Experimental-results/figures/correlation_panels.pdf}
+\caption{Relationships between model-size indicators and solve time over 48 successful runs. Log axes are used where the metric range spans several orders of magnitude.}
+\label{fig:exp-correlations}
+\end{figure}
+
+This result is consistent with the GCS formulation. Edges do not merely encode topological adjacency; they also introduce flow variables and continuity constraints between adjacent convex sets. A decomposition with fewer regions can still create a difficult optimization problem if it induces a dense graph. Consequently, the number of regions alone is an incomplete proxy for computational difficulty.
+
+\subsection{Trajectory Quality}
+Table~\ref{tab:exp-quality} reports median path quality metrics. Neither method dominates in path length or trajectory time. ACD produces shorter paths on \code{clustering} and \code{u\_shaped}; VCC performs better on \code{rooms}, is nearly equivalent on \code{flappy}, and has only three successful \code{narrows} runs for comparison.
+
+\begin{table}[htbp]
+\caption{Median trajectory-quality metrics over successful runs.}
+\label{tab:exp-quality}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3.2pt}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+Map & Method & Path length & Traj. time & Min. clearance & Active regions \\
+\midrule
+Clustering & ACD & 7.09 & 8.82 & $6.38{\times}10^{-5}$ & 13 \\
+           & VCC & 8.29 & 8.38 & $1.66{\times}10^{-1}$ & 5 \\
+Narrows    & ACD & 12.50 & 15.70 & $4.79{\times}10^{-4}$ & 9 \\
+           & VCC & 12.00 & 16.10 & $2.50{\times}10^{-3}$ & 7 \\
+Rooms      & ACD & 8.19 & 8.02 & $5.71{\times}10^{-3}$ & 7 \\
+           & VCC & 7.63 & 7.40 & $1.24{\times}10^{-2}$ & 8 \\
+U-shaped   & ACD & 7.47 & 7.26 & $5.36{\times}10^{-4}$ & 8 \\
+           & VCC & 7.95 & 7.96 & $4.61{\times}10^{-2}$ & 5 \\
+Flappy     & ACD & 21.40 & 26.30 & $2.98{\times}10^{-4}$ & 11 \\
+           & VCC & 21.30 & 25.40 & $5.64{\times}10^{-4}$ & 13 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+VCC gives a higher median minimum clearance in every successful map family. This suggests that visibility-based regions often keep the rounded trajectory farther from obstacles. However, this safety margin is not free: it comes with higher decomposition cost and lower robustness on narrow passages. The relaxation and rounding objectives also vary by topology. On \code{flappy}, the relaxation and rounded objectives are nearly identical, indicating a tight relaxation for this corridor-like structure. On \code{clustering}, VCC exhibits a larger relaxation--rounding gap, showing that a compact continuous relaxation does not always preserve solution quality after discrete path selection.
+
+\subsection{Visual Evidence on Flappy Maps}
+The \code{flappy} family provides a useful qualitative check because each instance forces a winding route through alternating upper and lower openings. Figure~\ref{fig:exp-flappy} compares ACD and VCC on all five \code{flappy} seeds. Both methods find feasible trajectories in every seed, and their path-quality metrics are close. The main difference is computational: the median end-to-end runtime is 1.13 s for ACD and 12.90 s for VCC, mostly because VCC decomposition dominates the pipeline.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.48\textwidth]{5-Experimental-results/figures/flappy_seed0_comparison.png}
+\includegraphics[width=0.48\textwidth]{5-Experimental-results/figures/flappy_seed1_comparison.png}
+\includegraphics[width=0.48\textwidth]{5-Experimental-results/figures/flappy_seed2_comparison.png}
+\includegraphics[width=0.48\textwidth]{5-Experimental-results/figures/flappy_seed3_comparison.png}
+\includegraphics[width=0.48\textwidth]{5-Experimental-results/figures/flappy_seed4_comparison.png}
+\caption{ACD and VCC comparisons on the five \code{flappy} seeds. Obstacles are black, convex regions are colored, and the GCS trajectory is plotted in blue.}
+\label{fig:exp-flappy}
+\end{figure}
+
+\subsection{Discussion and Limitations}
+The main conclusion is that region count alone is not sufficient to characterize GCS difficulty. A useful decomposition must be evaluated through the induced edge count, presolved model size, relaxation and rounding behavior, decomposition time, and final trajectory quality. Under the tested one-query pipeline, ACD is the more reliable and faster default. VCC becomes compelling when the decomposition can be amortized across repeated solves or when the environment resembles \code{clustering}, where the visibility graph substantially reduces the GCS solve time.
+
+The study has several limitations. Each map family contains only five seeds, and VCC has only three successful \code{narrows} runs. All experiments use the same workspace scale, obstacle density, obstacle size, and area-coverage mode. The reported values are extracted from diagnostic outputs; metrics not shown in those diagnostics, such as mean clearance and smoothness proxies, are not analyzed. A broader evaluation should vary workspace scale, obstacle density, VCC sampling budget, coverage target, and the number of seeds.
