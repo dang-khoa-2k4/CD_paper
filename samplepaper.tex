@@ -6,7 +6,7 @@
 %
 \usepackage[utf8]{inputenc}
 \usepackage[T1,T5]{fontenc}
-\usepackage[english,vietnamese]{babel}
+\usepackage[vietnamese,english]{babel}
 \usepackage{amsmath,amssymb}
 \usepackage{float}
 % T1 fonts will be used to generate the final print and online PDFs,
@@ -14,6 +14,7 @@
 % Other font encondings may result in incorrect characters.
 %
 \usepackage{graphicx}
+\usepackage{url}
 % Used for displaying a sample figure. If possible, figure files should
 % be included in EPS format.
 % Keep compilation usable when optional experiment figures are not checked out.
@@ -74,20 +75,59 @@ The abstract should briefly summarize the contents of the paper in
 %
 %
 \section{Introduction}
-%
+Motion planning requires a robot to reach a goal while remaining collision free
+and respecting its motion constraints. This task is challenging because obstacles
+make the free configuration space non-convex. Sampling-based planners, such as
+probabilistic roadmaps and rapidly exploring random trees, can explore complex
+spaces effectively~\cite{KavrakiEtAl1996,LaValle1998}; trajectory-optimization
+methods can generate smooth motions but commonly depend on a feasible
+initialization and may converge to a local solution
+~\cite{Zucker2013_CHOMP,Schulman2014_TrajOpt}. Methods that expose convex
+structure in the free space offer a complementary route to handling this
+geometric non-convexity.
 
-% Context and motivation: Giới thiệu ý nghĩa, vai trò của bài toán motion planning trong các ứng dụng hiện nay. 
+Graphs of Convex Sets (GCS) formulate motion planning as a joint discrete and
+continuous optimization problem~\cite{MarcucciEtAl2023GCS}. A collision-free
+free-space cover is represented by convex regions and their feasible
+transitions; GCS then selects a route through this graph while optimizing the
+trajectory within the chosen regions. When combined with B\'ezier curves, the
+convex-hull property provides continuous-time collision guarantees from convex
+containment constraints~\cite{MarcucciEtAl2023MotionPlanning}. The quality of
+the convex cover is therefore central to practical performance. It controls not
+only the number of regions, but also their overlap pattern, the number of GCS
+edges, and ultimately the size of the optimization problem.
 
-% Literature review: Điểm qua một số hướng tiép cận nổi bật (kèm tài liệu tham khảo): mỗi hướng tiếp cận mô tả ngắn gọn so sánh ưu nhược điểm. Trong đó nhấn mạnh các ưu điểm của việc ứng dụng GCS vào motion planning (Tại sao việc phân hoạch không gian an toàn (safe space partitioning) thành các tập lồi lại quyết định trực tiếp đến quy mô và hiệu suất giải bài toán GCS) --> mục tiêu của paper: so sánh đánh giá ảnh hường của các cách phân hoạch ...
-% Điểm qua các phương pháp phân hoạch hiện có ACD, IRIS, VCC 
+This paper studies that front-end design choice by comparing Approximate Convex
+Decomposition (ACD)~\cite{LienAmato2006} and Visibility Clique Cover
+(VCC)~\cite{DeitsTedrake2023VCC} in the same GCS--B\'ezier planning pipeline.
+ACD uses local concavity to decompose polygonal free space, whereas VCC uses
+sampled visibility and convex-region inflation to seek a compact cover. These
+methods embody different trade-offs: ACD can be inexpensive to construct but may
+yield many local regions, while VCC can reduce the downstream graph but incurs
+sampling and clique-cover costs and can be sensitive to narrow passages.
 
-% Contribution: qua thực nghiệm đánh giá phương pháp nào cho kết quả tốt, trade off .... 
+The paper makes the following empirical contributions:
+\begin{itemize}
+  \item It provides a paired comparison of ACD and VCC on five two-dimensional
+  map families, using five randomized instances per family and a common
+  GCS--B\'ezier planner.
+  \item It evaluates decomposition time, GCS graph and presolved-model size,
+  solve time, end-to-end time, success rate, and trajectory quality rather than
+  using the number of regions as the sole proxy for performance.
+  \item It shows that the induced edge structure is a stronger predictor of GCS
+  solve time than region count alone. In the tested single-query setting, ACD is
+  the more reliable and faster end-to-end default, while VCC is most useful when
+  its decomposition can be amortized across repeated queries or when it
+  substantially reduces graph connectivity.
+\end{itemize}
 
-% Paper organization: Cấu trúc paper gồm các phần: ...
+The remainder of the paper is organized as follows.
+Section~\ref{sec:technical-background} summarizes the GCS free-space
+representation and the two decomposition methods. Section~3 presents the
+GCS--B\'ezier planning framework. Section~4 reports the experimental evaluation,
+and Section~5 concludes the paper and outlines future work.
 
-%
-% Technical background and convex-decomposition methods.
-\include{2-Techical-background/vi-technical-background}
+\input{2-Techical-background/vi-technical-background}
 
 %
 \section{Integrated Framework GCS-Bézier for Motion Planning}

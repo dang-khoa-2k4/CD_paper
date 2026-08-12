@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.15)  26 JUL 2026 14:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.15)  12 AUG 2026 20:20
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/dang-khoa/Documents/GCS/Convex_Deompostion/samplepaper.tex
-(/home/dang-khoa/Documents/GCS/Convex_Deompostion/samplepaper.tex
+**/home/dang-khoa/Documents/GCS/Convex_Decompostion/samplepaper.tex
+(/home/dang-khoa/Documents/GCS/Convex_Decompostion/samplepaper.tex
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
 (./llncs.cls
@@ -324,7 +324,14 @@ Package: babel 2024/01/07 v24.1 The Babel package
  (/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
 \bbl@readstream=\read2
 \bbl@dirlevel=\count292
- (/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+ (/usr/share/texlive/texmf-dist/tex/generic/babel-vietnamese/vietnamese.ldf
+Language: vietnamese 
+ Loading definitions for the Vietnamese font encoding (/usr/share/texlive/texmf-dist/tex/latex/vntex/t5enc.def
+File: t5enc.def 2006/11/21 v1.4 Vietnamese T5 encoding
+LaTeX Font Info:    Redeclaring font encoding T5 on input line 75.
+)
+Package babel Info: Making " an active character on input line 147.
+) (/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
 Language: english 2017/06/06 v3.3r English support from the babel system
 Package babel Info: Hyphen rules for 'canadian' set to \l@english
 (babel)             (\language0). Reported on input line 102.
@@ -332,19 +339,12 @@ Package babel Info: Hyphen rules for 'australian' set to \l@ukenglish
 (babel)             (\language37). Reported on input line 105.
 Package babel Info: Hyphen rules for 'newzealand' set to \l@ukenglish
 (babel)             (\language37). Reported on input line 108.
-) (/usr/share/texlive/texmf-dist/tex/generic/babel-vietnamese/vietnamese.ldf
-Language: vietnamese 
- Loading definitions for the Vietnamese font encoding (/usr/share/texlive/texmf-dist/tex/latex/vntex/t5enc.def
-File: t5enc.def 2006/11/21 v1.4 Vietnamese T5 encoding
-LaTeX Font Info:    Redeclaring font encoding T5 on input line 75.
-)
-Package babel Info: Making " an active character on input line 147.
-)) (/usr/share/texlive/texmf-dist/tex/generic/babel/locale/vi/babel-vietnamese.tex
-Package babel Info: Importing font and identification data for vietnamese
-(babel)             from babel-vi.ini. Reported on input line 11.
-) (/usr/share/texlive/texmf-dist/tex/generic/babel/locale/en/babel-english.tex
+)) (/usr/share/texlive/texmf-dist/tex/generic/babel/locale/en/babel-english.tex
 Package babel Info: Importing font and identification data for english
 (babel)             from babel-en.ini. Reported on input line 11.
+) (/usr/share/texlive/texmf-dist/tex/generic/babel/locale/vi/babel-vietnamese.tex
+Package babel Info: Importing font and identification data for vietnamese
+(babel)             from babel-vi.ini. Reported on input line 11.
 ) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2023/05/13 v2.17o AMS math features
 \@mathmargin=\skip52
@@ -447,332 +447,183 @@ File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen173
 \Gin@req@width=\dimen174
+) (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+) (/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen175
+\lightrulewidth=\dimen176
+\cmidrulewidth=\dimen177
+\belowrulesep=\dimen178
+\belowbottomsep=\dimen179
+\aboverulesep=\dimen180
+\abovetopsep=\dimen181
+\cmidrulesep=\dimen182
+\cmidrulekern=\dimen183
+\defaultaddspace=\dimen184
+\@cmidla=\count306
+\@cmidlb=\count307
+\@aboverulesep=\dimen185
+\@belowrulesep=\dimen186
+\@thisruleclass=\count308
+\@lastruleclass=\count309
+\@thisrulewidth=\dimen187
+) (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+Package: array 2023/10/16 v2.5g Tabular extension package (FMi)
+\col@sep=\dimen188
+\ar@mcellbox=\box103
+\extrarowheight=\dimen189
+\NC@list=\toks31
+\extratabsurround=\skip55
+\backup@length=\skip56
+\ar@cellbox=\box104
 ) (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count306
-\l__pdf_internal_box=\box103
-) (./samplepaper.aux (./2-Techical-background/vi-technical-background.aux
-
-LaTeX Warning: Label `sec:space_decomp' multiply defined.
-
-
-LaTeX Warning: Label `subsubsec:acd_basic_concepts' multiply defined.
-
-
-LaTeX Warning: Label `fig:acd_basic_concepts' multiply defined.
-
-
-LaTeX Warning: Label `subsubsec:concavity_measures' multiply defined.
-
-
-LaTeX Warning: Label `fig:nonmonotonic-concavity' multiply defined.
-
-
-LaTeX Warning: Label `subsec:vcc' multiply defined.
-
-
-LaTeX Warning: Label `fig:vcc_pipeline' multiply defined.
-
-
-LaTeX Warning: Label `tab:decomp_comparison' multiply defined.
-
-))
+\l__color_backend_stack_int=\count310
+\l__pdf_internal_box=\box105
+) (./samplepaper.aux)
 \openout1 = `samplepaper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
-LaTeX Font Info:    Checking defaults for T5/cmr/m/n on input line 35.
-LaTeX Font Info:    ... okay on input line 35.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
+LaTeX Font Info:    Checking defaults for T5/cmr/m/n on input line 42.
+LaTeX Font Info:    ... okay on input line 42.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count307
-\scratchdimen=\dimen175
-\scratchbox=\box104
-\nofMPsegments=\count308
-\nofMParguments=\count309
-\everyMPshowfont=\toks31
-\MPscratchCnt=\count310
-\MPscratchDim=\dimen176
-\MPnumerator=\count311
-\makeMPintoPDFobject=\count312
-\everyMPtoPDFconversion=\toks32
+\scratchcounter=\count311
+\scratchdimen=\dimen190
+\scratchbox=\box106
+\nofMPsegments=\count312
+\nofMParguments=\count313
+\everyMPshowfont=\toks32
+\MPscratchCnt=\count314
+\MPscratchDim=\dimen191
+\MPnumerator=\count315
+\makeMPintoPDFobject=\count316
+\everyMPtoPDFconversion=\toks33
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-LaTeX Font Info:    Trying to load font information for U+msa on input line 58.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 65.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 58.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 65.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for T5+cmtt on input line 58.
+LaTeX Font Info:    Trying to load font information for T5+cmtt on input line 65.
  (/usr/share/texlive/texmf-dist/tex/latex/vntex/t5cmtt.fd
 File: t5cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 ) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-\openout2 = `2-Techical-background/vi-technical-background.aux'.
-
- (./2-Techical-background/vi-technical-background.tex
-
-LaTeX Warning: Citation `LienAmato2006' on page 2 undefined on input line 13.
-
-[2
-
-]
-<image/ACD-5.png, id=24, 569.12625pt x 187.45032pt>
-File: image/ACD-5.png Graphic file (type png)
-<use image/ACD-5.png>
-Package pdftex.def Info: image/ACD-5.png  used on input line 53.
-(pdftex.def)             Requested size: 242.98541pt x 80.03287pt.
-
-
-LaTeX Warning: Citation `LienAmato2006' on page 3 undefined on input line 60.
-
-<image/ACD-3.png, id=26, 545.03625pt x 180.675pt>
-File: image/ACD-3.png Graphic file (type png)
-<use image/ACD-3.png>
-Package pdftex.def Info: image/ACD-3.png  used on input line 70.
-(pdftex.def)             Requested size: 347.12354pt x 115.06918pt.
-<image/ACD-1.png, id=27, 690.32906pt x 234.1247pt>
-File: image/ACD-1.png Graphic file (type png)
-<use image/ACD-1.png>
-Package pdftex.def Info: image/ACD-1.png  used on input line 82.
-(pdftex.def)             Requested size: 347.12354pt x 117.72653pt.
-[3 <./image/ACD-5.png> <./image/ACD-3.png>]
-<image/ACD-2.png, id=37, 386.94562pt x 73.02281pt>
-File: image/ACD-2.png Graphic file (type png)
-<use image/ACD-2.png>
-Package pdftex.def Info: image/ACD-2.png  used on input line 100.
-(pdftex.def)             Requested size: 347.12354pt x 65.5082pt.
- [4 <./image/ACD-1.png> <./image/ACD-2.png>]
-<image/ACD-6.png, id=43, 670.75594pt x 188.20313pt>
-File: image/ACD-6.png Graphic file (type png)
-<use image/ACD-6.png>
-Package pdftex.def Info: image/ACD-6.png  used on input line 120.
-(pdftex.def)             Requested size: 347.12354pt x 97.3952pt.
-<image/iris_algo_1.png, id=44, 486.31688pt x 382.42876pt>
-File: image/iris_algo_1.png Graphic file (type png)
-<use image/iris_algo_1.png>
-Package pdftex.def Info: image/iris_algo_1.png  used on input line 141.
-(pdftex.def)             Requested size: 173.56177pt x 136.48383pt.
- [5 <./image/ACD-6.png>]
-<image/iris_2.png, id=49, 484.05844pt x 377.91188pt>
-File: image/iris_2.png Graphic file (type png)
-<use image/iris_2.png>
-Package pdftex.def Info: image/iris_2.png  used on input line 178.
-(pdftex.def)             Requested size: 173.56177pt x 135.50035pt.
- [6 <./image/iris_algo_1.png>]
-<image/iris-3.png, id=58, 472.01344pt x 380.17032pt>
-File: image/iris-3.png Graphic file (type png)
-<use image/iris-3.png>
-Package pdftex.def Info: image/iris-3.png  used on input line 200.
-(pdftex.def)             Requested size: 208.27623pt x 167.75113pt.
-<image/time-iris.png, id=59, 1080.035pt x 896.34875pt>
-File: image/time-iris.png Graphic file (type png)
-<use image/time-iris.png>
-Package pdftex.def Info: image/time-iris.png  used on input line 212.
-(pdftex.def)             Requested size: 347.12354pt x 288.08208pt.
-
-
-LaTeX Warning: Citation `DeitsTedrake2014' on page 7 undefined on input line 213.
-
-
-LaTeX Warning: Citation `DeitsTedrake2014' on page 7 undefined on input line 218.
-
-
-LaTeX Warning: Citation `DeitsTedrake2023NP' on page 7 undefined on input line 220.
-
-
-LaTeX Warning: Citation `DeitsTedrake2022CIRIS' on page 7 undefined on input line 220.
-
-[7 <./image/iris_2.png>] [8 <./image/iris-3.png> <./image/time-iris.png>]
-
-LaTeX Warning: Citation `DeitsTedrake2023VCC' on page 9 undefined on input line 228.
-
-<image/VCC-pipeline.png, id=70, 1617.04124pt x 285.065pt>
-File: image/VCC-pipeline.png Graphic file (type png)
-<use image/VCC-pipeline.png>
-Package pdftex.def Info: image/VCC-pipeline.png  used on input line 234.
-(pdftex.def)             Requested size: 347.12354pt x 61.19208pt.
-
-LaTeX Warning: Citation `DeitsTedrake2023VCC' on page 9 undefined on input line 235.
-
-
-LaTeX Warning: Citation `DeitsTedrake2023VCC' on page 9 undefined on input line 265.
-
-[9 <./image/VCC-pipeline.png>]
-
-LaTeX Warning: Reference `sec:gcs_approach' on page 10 undefined on input line 316.
-
-
-LaTeX Warning: Reference `sec:ocp_dms_approach' on page 10 undefined on input line 316.
-
-
-LaTeX Warning: Reference `ch:experiments' on page 10 undefined on input line 316.
-
-[10]
-
-LaTeX Warning: Citation `LienAmato2006' on page 11 undefined on input line 327.
-
-[11]
-File: image/ACD-5.png Graphic file (type png)
-<use image/ACD-5.png>
-Package pdftex.def Info: image/ACD-5.png  used on input line 367.
-(pdftex.def)             Requested size: 242.98541pt x 80.03287pt.
-
-
-LaTeX Warning: Citation `LienAmato2006' on page 12 undefined on input line 374.
-
-File: image/ACD-3.png Graphic file (type png)
-<use image/ACD-3.png>
-Package pdftex.def Info: image/ACD-3.png  used on input line 384.
-(pdftex.def)             Requested size: 347.12354pt x 115.06918pt.
-File: image/ACD-1.png Graphic file (type png)
-<use image/ACD-1.png>
-Package pdftex.def Info: image/ACD-1.png  used on input line 396.
-(pdftex.def)             Requested size: 347.12354pt x 117.72653pt.
-[12]
-File: image/ACD-2.png Graphic file (type png)
-<use image/ACD-2.png>
-Package pdftex.def Info: image/ACD-2.png  used on input line 414.
-(pdftex.def)             Requested size: 347.12354pt x 65.5082pt.
- [13]
-File: image/ACD-6.png Graphic file (type png)
-<use image/ACD-6.png>
-Package pdftex.def Info: image/ACD-6.png  used on input line 434.
-(pdftex.def)             Requested size: 347.12354pt x 97.3952pt.
-File: image/iris_algo_1.png Graphic file (type png)
-<use image/iris_algo_1.png>
-Package pdftex.def Info: image/iris_algo_1.png  used on input line 455.
-(pdftex.def)             Requested size: 173.56177pt x 136.48383pt.
- [14]
-File: image/iris_2.png Graphic file (type png)
-<use image/iris_2.png>
-Package pdftex.def Info: image/iris_2.png  used on input line 492.
-(pdftex.def)             Requested size: 173.56177pt x 135.50035pt.
- [15]
-File: image/iris-3.png Graphic file (type png)
-<use image/iris-3.png>
-Package pdftex.def Info: image/iris-3.png  used on input line 514.
-(pdftex.def)             Requested size: 208.27623pt x 167.75113pt.
-File: image/time-iris.png Graphic file (type png)
-<use image/time-iris.png>
-Package pdftex.def Info: image/time-iris.png  used on input line 526.
-(pdftex.def)             Requested size: 347.12354pt x 288.08208pt.
-
-
-LaTeX Warning: Citation `DeitsTedrake2014' on page 16 undefined on input line 527.
-
-
-LaTeX Warning: Citation `DeitsTedrake2014' on page 16 undefined on input line 532.
-
-
-LaTeX Warning: Citation `DeitsTedrake2023NP' on page 16 undefined on input line 534.
-
-
-LaTeX Warning: Citation `DeitsTedrake2022CIRIS' on page 16 undefined on input line 534.
-
-[16] [17]
-
-LaTeX Warning: Citation `DeitsTedrake2023VCC' on page 18 undefined on input line 542.
-
-File: image/VCC-pipeline.png Graphic file (type png)
-<use image/VCC-pipeline.png>
-Package pdftex.def Info: image/VCC-pipeline.png  used on input line 548.
-(pdftex.def)             Requested size: 347.12354pt x 61.19208pt.
-
-LaTeX Warning: Citation `DeitsTedrake2023VCC' on page 18 undefined on input line 549.
-
-
-LaTeX Warning: Citation `DeitsTedrake2023VCC' on page 18 undefined on input line 579.
-
-[18]
-
-LaTeX Warning: Reference `sec:gcs_approach' on page 19 undefined on input line 630.
-
-
-LaTeX Warning: Reference `sec:ocp_dms_approach' on page 19 undefined on input line 630.
-
-
-LaTeX Warning: Reference `ch:experiments' on page 19 undefined on input line 630.
-
-) [19]
-Package epstopdf Info: Source file: <fig1.eps>
-(epstopdf)                    date: 2026-07-26 06:04:34
-(epstopdf)                    size: 357553 bytes
-(epstopdf)             Output file: <fig1-eps-converted-to.pdf>
-(epstopdf)                    date: 2026-07-26 13:21:07
-(epstopdf)                    size: 26208 bytes
-(epstopdf)             Command: <repstopdf --outfile=fig1-eps-converted-to.pdf fig1.eps>
-(epstopdf)             \includegraphics on input line 159.
-Package epstopdf Info: Output file is already uptodate.
-<fig1-eps-converted-to.pdf, id=110, 345.29pt x 142.5325pt>
-File: fig1-eps-converted-to.pdf Graphic file (type pdf)
-<use fig1-eps-converted-to.pdf>
-Package pdftex.def Info: fig1-eps-converted-to.pdf  used on input line 159.
-(pdftex.def)             Requested size: 347.12354pt x 143.29115pt.
-
-Overfull \hbox (18.66447pt too wide) in paragraph at lines 165--168
-\T5/cmr/m/it/10 the following text appears in italics. Definitions, lemmas, propositions, and corollaries
- []
-
-[20
-
-
- <./fig1-eps-converted-to.pdf>]
-Overfull \hbox (2.65216pt too wide) in paragraph at lines 177--186
-\T5/cmr/m/n/10 numbers. Citations using labels or the author/year convention are also acceptable.
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] (./2-Techical-background/vi-technical-background.tex [2]) (./5-Experimental-results/experimental-results-and-discussion.tex [3] [4]
+<5-Experimental-results/figures/correlation_panels.pdf, id=33, 875.67104pt x 521.54805pt>
+File: 5-Experimental-results/figures/correlation_panels.pdf Graphic file (type pdf)
+<use 5-Experimental-results/figures/correlation_panels.pdf>
+Package pdftex.def Info: 5-Experimental-results/figures/correlation_panels.pdf  used on input line 44.
+(pdftex.def)             Requested size: 347.12354pt x 206.74535pt.
+ [5 <./5-Experimental-results/figures/correlation_panels.pdf>]
+<5-Experimental-results/figures/flappy_seed0_comparison.png, id=179, 2362.8275pt x 1545.775pt>
+File: 5-Experimental-results/figures/flappy_seed0_comparison.png Graphic file (type png)
+<use 5-Experimental-results/figures/flappy_seed0_comparison.png>
+Package pdftex.def Info: 5-Experimental-results/figures/flappy_seed0_comparison.png  used on input line 85.
+(pdftex.def)             Requested size: 166.61781pt x 108.99365pt.
+<5-Experimental-results/figures/flappy_seed1_comparison.png, id=180, 2362.8275pt x 1545.775pt>
+File: 5-Experimental-results/figures/flappy_seed1_comparison.png Graphic file (type png)
+<use 5-Experimental-results/figures/flappy_seed1_comparison.png>
+Package pdftex.def Info: 5-Experimental-results/figures/flappy_seed1_comparison.png  used on input line 86.
+(pdftex.def)             Requested size: 166.61781pt x 108.99365pt.
+<5-Experimental-results/figures/flappy_seed2_comparison.png, id=181, 2362.8275pt x 1545.775pt>
+File: 5-Experimental-results/figures/flappy_seed2_comparison.png Graphic file (type png)
+<use 5-Experimental-results/figures/flappy_seed2_comparison.png>
+Package pdftex.def Info: 5-Experimental-results/figures/flappy_seed2_comparison.png  used on input line 87.
+(pdftex.def)             Requested size: 166.61781pt x 108.99365pt.
+<5-Experimental-results/figures/flappy_seed3_comparison.png, id=182, 2362.8275pt x 1545.775pt>
+File: 5-Experimental-results/figures/flappy_seed3_comparison.png Graphic file (type png)
+<use 5-Experimental-results/figures/flappy_seed3_comparison.png>
+Package pdftex.def Info: 5-Experimental-results/figures/flappy_seed3_comparison.png  used on input line 88.
+(pdftex.def)             Requested size: 166.61781pt x 108.99365pt.
+<5-Experimental-results/figures/flappy_seed4_comparison.png, id=183, 2362.8275pt x 1545.775pt>
+File: 5-Experimental-results/figures/flappy_seed4_comparison.png Graphic file (type png)
+<use 5-Experimental-results/figures/flappy_seed4_comparison.png>
+Package pdftex.def Info: 5-Experimental-results/figures/flappy_seed4_comparison.png  used on input line 89.
+(pdftex.def)             Requested size: 166.61781pt x 108.99365pt.
+) [6] [7 <./5-Experimental-results/figures/flappy_seed0_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed1_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed2_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed3_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed4_comparison.png (PNG copy)>] (./samplepaper.bbl
+Underfull \hbox (badness 3907) in paragraph at lines 7--8
+[]\T5/cmr/m/n/9 Deits, R., Tedrake, R.: Com-put-ing large con-vex re-gions of obstacle-free
  []
 
 
-Overfull \hbox (7.3999pt too wide) in paragraph at lines 177--186
-\T5/cmr/m/n/10 journal articles [[]], an LNCS chapter [[]], a book [[]], proceedings without editors [[]],
+Underfull \hbox (badness 4765) in paragraph at lines 7--8
+\T5/cmr/m/n/9 space through semidef-i-nite pro-gram-ming. In: Al-go-rith-mic Foun-da-tions of
  []
 
-[21] (./samplepaper.aux (./2-Techical-background/vi-technical-background.aux))
+
+Underfull \hbox (badness 10000) in paragraph at lines 7--8
+\T5/cmr/m/n/9 https://doi.org/10.1007/978-3-319-16595-0_7, $\T5/cmtt/m/n/9 https : / / groups . csail . mit . edu /
+ []
+
+
+Underfull \hbox (badness 5345) in paragraph at lines 10--11
+[]\T5/cmr/m/n/9 Kavraki, L.E., Svestka, P., Latombe, J.C., Over-mars, M.H.: Prob-a-bilis-
+ []
+
+
+Underfull \hbox (badness 3219) in paragraph at lines 10--11
+\T5/cmr/m/n/9 tic roadmaps for path plan-ning in high-dimensional con-fig-u-ra-tion spaces.
+ []
+
+
+Underfull \hbox (badness 4108) in paragraph at lines 10--11
+\T5/cmr/m/n/9 IEEE Trans-ac-tions on Robotics and Au-toma-tion \T5/cmr/bx/n/9 12\T5/cmr/m/n/9 (4), 566--580 (1996).
+ []
+
+
+Underfull \hbox (badness 1859) in paragraph at lines 16--17
+[]\T5/cmr/m/n/9 Lien, J.M., Am-ato, N.M.: Ap-prox-i-mate con-vex de-com-po-si-tion of poly-gons.
+ []
+
+
+Underfull \hbox (badness 1881) in paragraph at lines 19--20
+[]\T5/cmr/m/n/9 Marcucci, T., Pe-tersen, M., von Wrangell, D., Tedrake, R.: Mo-tion plan-
+ []
+
+) [8] (./samplepaper.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
-
-
-LaTeX Warning: There were undefined references.
-
-
-LaTeX Warning: There were multiply-defined labels.
-
  ) 
 Here is how much of TeX's memory you used:
- 5077 strings out of 474222
- 77743 string characters out of 5748732
- 1934975 words of memory out of 5000000
- 27251 multiletter control sequences out of 15000+600000
- 577426 words of font info for 73 fonts, out of 8000000 for 9000
+ 5229 strings out of 474222
+ 80772 string characters out of 5748732
+ 1936975 words of memory out of 5000000
+ 27396 multiletter control sequences out of 15000+600000
+ 572615 words of font info for 68 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 57i,20n,65p,1256b,389s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm7.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vntt9.pfb>
-Output written on samplepaper.pdf (21 pages, 833204 bytes).
+ 57i,10n,65p,854b,355s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vntt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vntt9.pfb>
+Output written on samplepaper.pdf (8 pages, 2356943 bytes).
 PDF statistics:
- 237 PDF objects out of 1000 (max. 8388607)
- 135 compressed objects within 2 object streams
+ 275 PDF objects out of 1000 (max. 8388607)
+ 95 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 56 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
 
