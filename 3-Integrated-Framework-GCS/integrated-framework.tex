@@ -1,15 +1,64 @@
 \subsection{Region Graph and B\'ezier Trajectory Model}
 \label{sec:gcs-bezier-model}
 
-The planner takes as input the collision-free convex cover
-$\mathcal{Q}=\{Q_v\}$ constructed by either ACD or VCC. Each region is
-represented by a vertex in a directed graph $G=(V,E)$; an edge $(u,v)$ denotes
-a feasible transition between two adjacent regions. Source and target vertices,
-denoted by $\sigma$ and $\tau$, encode the prescribed configurations
-$\mathbf{x}_{\mathrm{start}}$ and $\mathbf{x}_{\mathrm{goal}}$, respectively.
-Thus, the discrete part of the problem is to select a $\sigma$--$\tau$ path,
-while the continuous part determines the trajectory inside the regions on that
-path.
+The planner starts from the collision-free convex cover
+$\mathcal{Q}=\{Q_i\}_{i=1}^{N_R}$ in
+Eq.~\eqref{eq:convex-cover}, constructed by either ACD or VCC.  Each region
+$Q_i$ is represented by a graph vertex $v_i$; we write $Q_{v_i}=Q_i$ when
+indexing regions by vertices.  Thus $|V|=N_R$ and $|E|=N_E$.  The source
+$\sigma$ and target $\tau$ are the designated vertices associated with the
+regions containing $\mathbf{x}_{\mathrm{start}}$ and
+$\mathbf{x}_{\mathrm{goal}}$, respectively.  A directed edge
+$e=(u,v)$ represents a feasible transition from $Q_u$ to $Q_v$.  The discrete
+problem selects an $\sigma$--$\tau$ path, while the continuous problem
+determines a trajectory in its selected regions.
+
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}[scale=0.69, >=Latex, line cap=round, line join=round,
+      every node/.style={font=\scriptsize}]
+    \begin{scope}
+      \draw[thick] (0,0) rectangle (6.1,3.6);
+      \fill[black!40] (2.52,1.45) rectangle (3.20,3.10);
+      \fill[black!40] (4.65,0.45) -- (5.65,0.45) -- (5.15,1.25) -- cycle;
+      \filldraw[fill=blue!15, draw=blue!65!black, thick]
+        (0.35,0.35) -- (2.15,0.35) -- (2.45,1.75) --
+        (1.55,2.10) -- (0.45,1.45) -- cycle;
+      \filldraw[fill=orange!17, draw=orange!75!black, thick]
+        (1.55,0.75) -- (3.75,0.55) -- (4.45,1.80) --
+        (3.85,2.75) -- (2.45,2.55) -- cycle;
+      \filldraw[fill=green!17, draw=green!55!black, thick]
+        (3.35,1.45) -- (5.90,1.55) -- (5.85,3.25) --
+        (4.30,3.35) -- (3.35,2.60) -- cycle;
+      \fill (0.90,0.78) circle (1.8pt);
+      \fill (5.48,2.78) circle (1.8pt);
+      \node[below left] at (0.90,0.78) {$\mathbf{x}_{\mathrm{start}}$};
+      \node[above right] at (5.48,2.78) {$\mathbf{x}_{\mathrm{goal}}$};
+      \node[blue!65!black] at (1.08,1.45) {$Q_\sigma$};
+      \node[orange!75!black] at (3.17,1.30) {$Q_1$};
+      \node[green!55!black] at (4.92,2.35) {$Q_\tau$};
+      \node[below] at (3.05,0) {(a) convex cover};
+    \end{scope}
+    \draw[->, very thick] (6.62,1.80) -- (7.45,1.80);
+    \begin{scope}[xshift=8.10cm]
+      \node[circle, draw=blue!65!black, fill=blue!10, minimum size=6.4mm]
+        (s) at (0.0,0.9) {$\sigma$};
+      \node[circle, draw=orange!75!black, fill=orange!12, minimum size=6.4mm]
+        (a) at (1.60,0.9) {$v_1$};
+      \node[circle, draw=green!55!black, fill=green!10, minimum size=6.4mm]
+        (t) at (3.50,0.9) {$\tau$};
+      \draw[->] (s) -- (a);
+      \draw[->] (a) -- (t);
+      \node[above] at (1.75,2.10) {$G=(V,E)$};
+      \node[below] at (1.75,0) {(b) induced region graph};
+    \end{scope}
+  \end{tikzpicture}
+  \caption{From a convex free-space cover to a GCS.  Each cover region maps to
+  one graph vertex, and each feasible common interface maps to a directed
+  transition.  The start and goal lie in the designated source and target
+  regions.}
+  \label{fig:region-to-gcs}
+\end{figure}
 
 For a region $Q_v\subset\mathbb{R}^{n_c}$, the local trajectory is an
 degree-$d$ B\'ezier curve
@@ -46,25 +95,30 @@ The timing and velocity constraints are written in convex perspective form:
   \label{eq:framework-kinematics}
 \end{equation}
 where $\Delta\mathbf{r}_{v,k}=\mathbf{r}_{v,k+1}-\mathbf{r}_{v,k}$,
-$\Delta h_{v,k}=h_{v,k+1}-h_{v,k}$, $\varepsilon>0$ prevents a degenerate time
-scaling, and $D$ is a convex velocity set. For each selected edge
-$(u,v)$, position and time are joined through
+$\Delta h_{v,k}=h_{v,k+1}-h_{v,k}$, and $\varepsilon>0$ prevents a degenerate
+time scaling.  Here $D\subseteq\mathbb{R}^{n_c}$ is a prescribed convex set of
+admissible configuration velocities, whose particular parametrization is set
+by the planning model.  For each selected edge $(u,v)$,
+position and time are joined through
 \begin{equation}
   \mathbf{r}_{u,d}=\mathbf{r}_{v,0},
   \qquad h_{u,d}=h_{v,0}.
   \label{eq:framework-c0-continuity}
 \end{equation}
 Together with Eq.~\eqref{eq:framework-containment}, this places the shared
-endpoint in $Q_u\cap Q_v$.
-Higher-order continuity constraints can be included in the edge model when a
-particular application requires them.
+endpoint in $Q_u\cap Q_v$.  Higher-order continuity constraints can be included
+in the edge model when a particular application requires them.
 
 \subsection{Perspective GCS Formulation}
 \label{sec:perspective-gcs}
 
 Let $\mathcal{X}_v$ collect the local constraints in
 Eqs.~\eqref{eq:framework-containment}--\eqref{eq:framework-kinematics}, and let
-$\mathcal{X}_e$ collect the compatibility constraints for edge $e=(u,v)$. GCS
+$\mathcal{X}_e$ collect the compatibility constraints for edge $e=(u,v)$.  For
+the designated source and target regions, $\mathcal{X}_\sigma$ and
+$\mathcal{X}_\tau$ additionally enforce
+$\mathbf{r}_{\sigma,0}=\mathbf{x}_{\mathrm{start}}$ and
+$\mathbf{r}_{\tau,d}=\mathbf{x}_{\mathrm{goal}}$, respectively.  GCS
 uses a binary flow variable $y_e$ to indicate whether an edge is selected.
 Rather than multiplying $y_e$ by the continuous variables directly, the
 perspective formulation introduces edge-local copies $z_{e,u}$ and $z_{e,v}$.
@@ -80,6 +134,11 @@ with the usual closed extension at $y_e=0$. This construction preserves
 convexity and switches the continuous variables and cost off when an edge is
 inactive~\cite{MarcucciEtAl2023GCS}.
 
+For a vertex $v$, let
+$\mathcal{E}^{+}(v)=\{e=(v,w)\in E\}$ and
+$\mathcal{E}^{-}(v)=\{e=(w,v)\in E\}$ denote its outgoing and incoming edge
+sets, respectively.  For an edge $e=(u,v)$, $z_{e,u}$ is the copy of the local
+trajectory variable at its tail $u$, and $z_{e,v}$ is the copy at its head $v$.
 The resulting GCS--B\'ezier problem can be expressed compactly as
 \begin{equation}
 \begin{aligned}
@@ -92,7 +151,7 @@ The resulting GCS--B\'ezier problem can be expressed compactly as
     && \forall v\in V,\\
   &
     \sum_{e\in\mathcal{E}^{-}(v)}z_{e,v}=
-    \sum_{e\in\mathcal{E}^{+}(v)}z_{e,v},
+    \sum_{e\in\mathcal{E}^{+}(v)}z_{e,u},
     && \forall v\in V\setminus\{\sigma,\tau\},\\
   &
     z_{e,u}\in y_e\mathcal{X}_u,\quad
@@ -105,13 +164,14 @@ The resulting GCS--B\'ezier problem can be expressed compactly as
 \label{eq:framework-gcs-micp}
 \end{equation}
 Here, $\delta_\sigma=1$, $\delta_\tau=-1$, and $\delta_v=0$ otherwise.
-The first constraint selects a $\sigma$--$\tau$ path, while the second enforces
-state-flow consistency across adjacent local trajectories. The source and
-target trajectory endpoints are fixed to the prescribed boundary configurations.
-Depending on the chosen convex costs and sets, this model is a mixed-integer
-convex program or a mixed-integer second-order cone program
-~\cite{MarcucciEtAl2023GCS,MarcucciEtAl2023MotionPlanning}. It can combine
-convex penalties on path length, traversal time, and trajectory smoothness.
+The first constraint routes one unit of flow from $\sigma$ to $\tau$.  The second equates the
+head copy of each incoming edge with the tail copy of each outgoing edge at the
+same region, thereby enforcing state-flow consistency across local
+trajectories.  Depending on the chosen convex costs and
+sets, this model is a mixed-integer convex program or a mixed-integer
+second-order cone program~\cite{MarcucciEtAl2023GCS,MarcucciEtAl2023MotionPlanning}.
+It can combine convex penalties on path length, traversal time, and trajectory
+smoothness.
 
 \subsection{Convex Relaxation and Path Rounding}
 \label{sec:gcs-relaxation-rounding}

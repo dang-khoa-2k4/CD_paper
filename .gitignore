@@ -1,0 +1,10 @@
+*.aux
+*.log
+*.out
+*.toc
+*.gz
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+fig1-eps-converted-to.pdf
