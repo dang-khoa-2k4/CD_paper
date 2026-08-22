@@ -55,7 +55,7 @@ families. ACD solved all 25 test instances and was faster end-to-end under the
 tested single-query configuration. VCC solved 23 instances; its failures
 occurred in narrow passages. Where visibility-based grouping reduced graph
 connectivity, VCC substantially lowered downstream GCS solve time---from
-40.10~s to 3.10~s on the \code{clustering} maps---and achieved higher median
+40.10~s to 3.10~s on the {clustered} maps---and achieved higher median
 minimum clearance in each successful family. However, its computational benefit
 and reliability did not transfer uniformly across environments, and neither
 method consistently dominated path length or traversal time. These results
@@ -126,7 +126,11 @@ Section~\ref{sec:gcs-bezier-framework} presents the GCS--B\'ezier planning
 framework. Section~\ref{sec:experiments} reports the experimental evaluation,
 and Section~\ref{sec:conclusion} concludes the paper and outlines future work.
 
+%
+\section{Technical Background}
+\label{sec:technical-background}
 \input{2-Techical-background/vi-technical-background}
+%
 
 %
 \section{Integrated GCS--B\'ezier Framework for Motion Planning}
@@ -149,7 +153,7 @@ This paper compared Approximate Convex Decomposition (ACD) and Visibility
 Clique Cover (VCC) as front ends for a common GCS--B\'ezier motion-planning
 pipeline.  The experiments show that the usefulness of a convex cover cannot
 be judged from its region count alone.  Although VCC substantially reduced the
-number of regions and GCS edges on the \code{clustering} maps, comparable
+number of regions and GCS edges on the {clustered} maps, comparable
 reductions did not occur uniformly across the other environments.  Over the 48
 successful runs, edge count was a stronger graph-level predictor of solve time
 than region count.  In the tested single-query configuration, ACD solved all
@@ -179,7 +183,7 @@ This paper compared ACD and VCC as alternative convex-cover front ends for the
 same GCS--B\'ezier motion-planning pipeline. We have shown that, across 25 paired
 instances, ACD solved every instance and VCC solved 23, with both failures in the
 \code{narrows} family. VCC substantially reduced the downstream graph on the
-\code{clustered} maps, but its decomposition cost made it slower end-to-end in
+{clustered} maps, but its decomposition cost made it slower end-to-end in
 all five map families under the tested single-query configuration. Across the
 48 successful runs, edge count was more strongly correlated with GCS solve time
 than region count, highlighting the importance of evaluating the connectivity

@@ -20,230 +20,358 @@ rate fell to 0.70 on \code{narrows} seed~3 and to 0.90 on \code{narrows}
 seeds~1 and~8. These outcomes show that a single successful VCC realization
 does not characterize robustness in a narrow-passage environment.
 
-The available summary records localize, but do not uniquely classify, the VCC
-failures. All ten trials for the affected \code{narrows} geometries contain
-decomposition time, region and edge counts, visible-edge counts, clique counts,
-and coverage estimates. A region graph was therefore constructed before the
-unsuccessful trials terminated, which is inconsistent with a failure that
-simply produced no clique cover. The summaries do not retain the raw
-\code{stage}, \code{decomp\_failed\_reason}, or \code{error\_message} fields
-needed to distinguish graph disconnection from a solver or trajectory-certificate
-failure. A technically plausible explanation is that stochastic visibility
-sampling attains high global coverage while failing to generate an overlapping
-bridge through one mandatory narrow gate; this can isolate the start- and
-goal-connected subgraphs even when total region and edge counts appear
-unexceptional. This mechanism is a hypothesis to be tested from the raw failure
-logs, not a failure label inferred from aggregate counts.
-
 \subsection{Model Size and Runtime}
-Table~\ref{tab:exp-runtime} reports the median and IQR of the ten geometry-level values
-in each family. For VCC, each geometry-level value is itself the median over its
-ten trials; failed trials remain in the success endpoint and are excluded only
-from trajectory-dependent quantities. Across-geometry interquartile ranges
-(IQRs) are reported in the text to expose dispersion without treating repeated
-VCC trials on the same geometry as independent observations.
+The runtime results separate into three computational regimes. Visibility-based
+aggregation is beneficial online when it removes both regions and
+intersections, as in \code{clustered} and \code{rooms}; it is ineffective when
+the resulting overlap graph remains dense, as in \code{u\_shaped}; and it is
+pure overhead when both methods induce essentially the same graph, as in
+\code{flappy}. Here, $N_R=|V|$ is the number of convex regions and $N_E=|E|$ is
+the number of directed adjacency edges in the GCS graph.
+\emph{Success} reports the number of runs producing a valid certified
+trajectory over the total number of attempts; each map family therefore
+contains 10 ACD attempts and 100 VCC attempts.
+The quantities $t_{\rm dec}$, $t_{\rm solve}$, and
+$t_{\rm e2e}=t_{\rm dec}+t_{\rm solve}$ denote the decomposition time,
+the downstream GCS solution time, and the per-run end-to-end planning
+time, respectively. Table~\ref{tab:exp-runtime} reports the typical scale of each
+regime using medians. Table~\ref{tab:exp-runtime-var} reports sample standard
+deviation (SD) and IQR separately, so stability can be assessed without
+embedding three statistics in every cell. The independent unit is the map
+geometry. A VCC geometry contributes the median of its ten trials; failed trials
+remain in the success endpoint and are excluded only from trajectory-dependent
+quantities.
 
 \begin{table}[htbp]
-\caption{Model size and runtime by map family, reported as median [Q1, Q3] across ten geometries. For VCC, each geometry contributes its median over ten trials. Time is measured in seconds.}
+\caption{Median model size and runtime across ten geometries per family. For VCC, each geometry contributes its median over ten trials. Time is measured in seconds.}
 \label{tab:exp-runtime}
 \centering
 \scriptsize
-\setlength{\tabcolsep}{2.2pt}
-\resizebox{\textwidth}{!}{%
+\setlength{\tabcolsep}{3.0pt}
 \begin{tabular}{@{}llrrrrrr@{}}
 \toprule
 Map & Method & Success & $N_R$ & $N_E$ & $t_{\rm dec}$ & $t_{\rm solve}$ & $t_{\rm e2e}$ \\
 \midrule
-Clustered & ACD & 10/10 & 188 [185.5,189.8] & 433 [422.3,449.3] & 15.48 [14.75,16.27] & 102.63 [97.26,128.64] & 117.52 [112.45,145.62] \\
-          & VCC & 100/100 & 34.5 [33.1,35.4] & 50 [47.6,55.4] & 137.70 [134.41,142.56] & 3.74 [3.04,4.27] & 141.61 [138.22,145.50] \\
-Narrows   & ACD & 10/10 & 15 [15,15] & 21 [20.3,22] & 0.83 [0.82,0.87] & 1.01 [0.79,1.15] & 1.84 [1.64,1.98] \\
-          & VCC & 95/100 & 17.3 [15.8,18.6] & 37.3 [32.0,46.1] & 18.87 [18.26,19.75] & 2.28 [2.10,2.66] & 21.38 [20.22,22.52] \\
-Rooms     & ACD & 10/10 & 31 [29.5,31] & 52 [48.3,52] & 1.64 [1.54,1.76] & 3.78 [3.08,4.60] & 5.43 [4.69,6.38] \\
-          & VCC & 96/100 & 14 [14,14] & 16.8 [16.1,19.4] & 18.07 [17.40,18.52] & 0.48 [0.43,0.67] & 18.62 [17.75,19.02] \\
-U-shaped  & ACD & 10/10 & 21.5 [20.0,22.8] & 32.5 [29.5,35.5] & 1.08 [1.03,1.14] & 1.53 [1.23,1.88] & 2.63 [2.25,2.94] \\
-          & VCC & 100/100 & 15.5 [15,16] & 43.3 [39.0,46.4] & 14.84 [14.00,14.98] & 2.95 [2.36,3.55] & 17.43 [17.06,18.23] \\
-Flappy    & ACD & 10/10 & 25 [25,25] & 24 [24,24] & 1.80 [1.78,1.84] & 0.29 [0.28,0.29] & 2.08 [2.07,2.13] \\
-          & VCC & 98/100 & 25 [25,25] & 24 [24,24] & 21.56 [21.43,21.80] & 0.33 [0.32,0.35] & 21.87 [21.75,22.19] \\
+Clustered & ACD & 10/10 & 188  & 433  & 15.48  & 102.63 & 117.52 \\
+          & VCC & 100/100 & 34.5 & 50   & 137.70 & 3.74   & 141.61 \\
+Narrows   & ACD & 10/10 & 15   & 21   & 0.83   & 1.01   & 1.84 \\
+          & VCC & 95/100 & 17.3 & 37.3 & 18.87  & 2.28   & 21.38 \\
+Rooms     & ACD & 10/10 & 31   & 52   & 1.64   & 3.78   & 5.43 \\
+          & VCC & 96/100 & 14   & 16.8 & 18.07  & 0.48   & 18.62 \\
+U-shaped  & ACD & 10/10 & 21.5 & 32.5 & 1.08   & 1.53   & 2.63 \\
+          & VCC & 100/100 & 15.5 & 43.3 & 14.84  & 2.95   & 17.43 \\
+Flappy    & ACD & 10/10 & 25   & 24   & 1.80   & 0.29   & 2.08 \\
+          & VCC & 98/100 & 25   & 24   & 21.56  & 0.33   & 21.87 \\
 \bottomrule
 \end{tabular}
-}
 \end{table}
-
-VCC most strongly compresses the \code{clustered} graphs: relative to ACD, it
-reduces the median region count from 188 to 34.5, the median edge count from 433
-to 50, and the median GCS time from 102.63~s to 3.74~s. This reduction is stable
-across geometries: the IQRs are $[185.5,189.8]$ versus $[33.1,35.4]$ regions
-and $[422.3,449.3]$ versus $[47.6,55.4]$ edges for ACD and VCC, respectively.
-Nevertheless, VCC decomposition requires 137.70~s (IQR
-$[134.41,142.56]$~s), so its median end-to-end time remains 24.09~s higher.
-The result isolates the trade-off: VCC creates a substantially cheaper online
-optimization problem, but its offline construction cost dominates a single
-query.
-
-Graph compression is topology dependent rather than a necessary consequence of
-using fewer regions. On \code{u\_shaped}, VCC reduces the median region count
-from 21.5 to 15.5 yet increases the edge count from 32.5 to 43.3 and the GCS
-time from 1.53~s to 2.95~s. Conversely, on \code{rooms}, VCC reduces both the
-edge count (52 to 16.8) and GCS time (3.78~s to 0.48~s). These contrasting cases
-show that region aggregation is computationally useful only when it also
-controls the intersection structure of the induced graph.
-
-Across all 50 paired geometries, two-sided Wilcoxon signed-rank tests with Holm
-correction over six prespecified comparisons confirm higher VCC decomposition
-cost ($p_{\rm adj}<1.1\times10^{-14}$), fewer VCC regions
-($p_{\rm adj}<9.3\times10^{-6}$), and a method difference in edge count
-($p_{\rm adj}=0.019$). The apparent difference in GCS time is not significant
-after correction ($p_{\rm raw}=0.048$, $p_{\rm adj}=0.097$), reflecting the
-opposing family-specific effects above. End-to-end time favors ACD in every map
-family: its IQR is $[112.45,145.62]$~s on \code{clustered} and remains below
-6.38~s at the upper quartile in each other family, whereas VCC's family-level
-median is at least 17.43~s outside \code{clustered}. Thus, ACD is the appropriate
-default for a single query under this protocol.
-
-Table~\ref{tab:exp-significance} reports the complete test statistics. We use
-the Wilcoxon signed-rank test because ACD and VCC are evaluated on the same
-geometries; an unpaired Mann--Whitney U test would discard this pairing and is
-therefore inappropriate here. Differences are defined as the ACD value minus
-the geometry-level VCC median. Holm adjustment controls the family-wise error
-rate across the six comparisons at $\alpha=0.05$.
 
 \begin{table}[htbp]
-\caption{Paired two-sided Wilcoxon signed-rank tests over 50 geometries. $\widetilde{\Delta}$ is the median paired difference (ACD minus VCC).}
-\label{tab:exp-significance}
+\caption{Across-geometry variability of model size and runtime. SD is the sample standard deviation; IQR is $Q_3-Q_1$. Time is measured in seconds.}
+\label{tab:exp-runtime-var}
 \centering
 \scriptsize
-\setlength{\tabcolsep}{4.0pt}
-\begin{tabular}{@{}lrrrrl@{}}
+\setlength{\tabcolsep}{3.0pt}
+\begin{tabular}{@{}lllrrrrr@{}}
 \toprule
-Metric & $n$ & $\widetilde{\Delta}$ & $W$ & $p_{\rm raw}$ & $p_{\rm Holm}$ \\
+Map & Method & Statistic & $N_R$ & $N_E$ & $t_{\rm dec}$ & $t_{\rm solve}$ & $t_{\rm e2e}$ \\
 \midrule
-$t_{\rm dec}$       & 50 & $-18.539$ & 0     & $1.78\times10^{-15}$ & $1.07\times10^{-14}$ \\
-$t_{\rm solve}$     & 50 & $-0.032$  & 433   & 0.0483 & 0.0966 \\
-$N_R$                & 50 & $6.5$     & 71    & $1.95\times10^{-6}$ & $9.30\times10^{-6}$ \\
-$N_E$                & 50 & $0.0$     & 233.5 & 0.0064 & 0.0192 \\
-Path length          & 50 & $-0.144$  & 541   & 0.3572 & 0.3572 \\
-Minimum clearance    & 50 & $-0.00239$& 174   & $1.86\times10^{-6}$ & $9.30\times10^{-6}$ \\
+Clustered & ACD & SD  & 5.54 & 23.00 & 1.22 & 26.39 & 26.63 \\
+          &     & IQR & 4.25 & 27.00 & 1.52 & 31.39 & 33.17 \\
+          & VCC & SD  & 2.34 & 7.97  & 8.31 & 1.36  & 9.45 \\
+          &     & IQR & 2.25 & 7.75  & 8.14 & 1.23  & 7.28 \\
+Narrows   & ACD & SD  & 0.32 & 1.25  & 0.05 & 0.22  & 0.25 \\
+          &     & IQR & 0.00 & 1.75  & 0.04 & 0.37  & 0.35 \\
+          & VCC & SD  & 2.10 & 9.31  & 1.37 & 0.78  & 2.00 \\
+          &     & IQR & 2.88 & 14.13 & 1.50 & 0.56  & 2.30 \\
+Rooms     & ACD & SD  & 2.18 & 6.36  & 0.21 & 1.16  & 1.32 \\
+          &     & IQR & 1.50 & 3.75  & 0.22 & 1.53  & 1.69 \\
+          & VCC & SD  & 0.92 & 3.32  & 1.67 & 0.17  & 1.80 \\
+          &     & IQR & 0.00 & 3.25  & 1.12 & 0.24  & 1.28 \\
+U-shaped  & ACD & SD  & 4.61 & 10.33 & 0.24 & 1.25  & 1.47 \\
+          &     & IQR & 2.75 & 6.00  & 0.11 & 0.65  & 0.68 \\
+          & VCC & SD  & 1.74 & 7.17  & 1.97 & 0.86  & 2.66 \\
+          &     & IQR & 1.00 & 7.38  & 0.98 & 1.19  & 1.17 \\
+Flappy    & ACD & SD  & 0.00 & 0.00  & 0.09 & 0.03  & 0.12 \\
+          &     & IQR & 0.00 & 0.00  & 0.06 & 0.01  & 0.06 \\
+          & VCC & SD  & 0.54 & 1.62  & 0.45 & 0.05  & 0.49 \\
+          &     & IQR & 0.00 & 0.00  & 0.37 & 0.03  & 0.44 \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+The decomposition and GCS stages favor different methods. On
+\code{clustered}, VCC removes approximately $82\%$ of the regions and $88\%$
+of the edges, reducing the median GCS solve time from 102.63~s to 3.74~s.
+However, its decomposition takes an additional 122.22~s, which is greater than
+the 98.89~s saved during the GCS solve. VCC is therefore slower for a single
+query. The same pattern appears on \code{rooms}: VCC saves 3.30~s in the GCS
+solve but adds 16.43~s during decomposition. These results indicate that VCC is
+most useful when the same decomposition can be reused for several queries.
+
+The number of regions alone does not determine the size of the GCS problem.
+On \code{u\_shaped}, VCC has six fewer regions at the median but approximately
+eleven more edges, and its solve time is almost twice that of ACD. Each graph
+edge adds variables and constraints to the GCS formulation; merging regions can
+therefore reduce $N_R$ without reducing $N_E$. On \code{flappy}, the regions
+form an almost linear sequence, and both methods have median
+$(N_R,N_E)=(25,24)$. VCC does not reduce the GCS graph in this case, but it
+still incurs the cost of visibility sampling and clique-cover construction.
+
+The SD and IQR values also show how much the results change across geometries.
+For \code{narrows}, the VCC edge count has SD 9.31 and IQR 14.13, compared with
+1.25 and 1.75 for ACD. This larger variation occurs in the map family with the
+lowest VCC success rate. For \code{flappy}, both graph-size IQRs are zero,
+whereas the VCC decomposition-time IQR is 0.37~s. Thus, the VCC decomposition
+time varies even when the resulting graph size remains unchanged.
+
+The family-level medians do not show one consistent direction for GCS solve
+time. VCC is faster on \code{clustered} and \code{rooms}, slower on
+\code{narrows} and \code{u\_shaped}, and similar to ACD on \code{flappy}.
+This variation confirms that the graph structure of each map family matters
+more than the decomposition method alone. In contrast, ACD has a lower median
+end-to-end time in all five families because its decomposition stage is much
+shorter. ACD is therefore more suitable for a single query under the tested
+setup. VCC remains useful when the decomposition can be reused for repeated
+queries and its initial cost can be spread across those queries.
 
 \subsection{Correlation Between Model Size and Solve Time}
 Figure~\ref{fig:exp-correlations} relates graph size to solve time using the
-current benchmark summaries. Each of the 100 observations represents one
-method--geometry pair: the single ACD run or the median of the ten VCC trials on
-that geometry. Edge count is substantially more strongly associated with solve
-time than region count. The Spearman coefficients are $\rho=0.884$
+current benchmark data. Each of the 100 observations represents one method and
+one geometry: the ACD result or the median of ten VCC trials for that geometry.
+Edge count has a stronger relationship with solve time than region count. The
+Spearman coefficients are $\rho=0.884$
 ($p=4.34\times10^{-34}$) for $N_E$ and $\rho=0.514$
-($p=4.59\times10^{-8}$) for $N_R$. Both associations are statistically
-detectable, but their magnitudes differ considerably.
+($p=4.59\times10^{-8}$) for $N_R$. Both relationships are statistically
+significant, but the coefficient for edge count is much larger.
 
-\begin{figure}[h!]
+\begin{figure}[htbp]
 \centering
 \includegraphics[width=\textwidth]{5-Experimental-results/figures/correlation_geometry_level.pdf}
-\caption{Geometry-level relationships between graph size and solve time in the current benchmark ($n=100$ method--geometry observations). VCC contributes its within-geometry median over ten trials. Both axes are logarithmic; colors distinguish the decomposition methods. Reported coefficients and $p$-values are from two-sided Spearman rank-correlation tests.}
+\caption{Relationship between graph size and solve time for the current benchmark ($n=100$ method--geometry observations). Each VCC observation is the median of ten trials on the same geometry. Both axes use logarithmic scales, and colors indicate the decomposition method. The coefficients and $p$-values are from two-sided Spearman rank-correlation tests.}
 \label{fig:exp-correlations}
 \end{figure}
 
-This disparity follows from how a GCS program is assembled. A region contributes
-a local copy of the continuous state and its within-set constraints, but each
-directed edge introduces a flow variable together with edge-conditioned copies
-of endpoint variables. For a B\'ezier trajectory, these copies are
-high-dimensional because they carry control points and timing variables, and
-their activation requires perspective formulations of continuity, derivative,
-and cost constraints. Increasing $N_E$ therefore expands several coupled blocks
-of variables and conic constraints per adjacency, not merely a scalar incidence
-matrix. A dense graph also gives presolve more candidate flows and bounds to
-propagate, weakens simple topological pruning when many alternate routes remain,
-and enlarges the relaxation subsequently passed to rounding. The stronger
-edge-count association is consequently consistent with $N_E$ acting as a
-pre-construction proxy for this edge-bound algebraic workload, whereas $N_R$
-does not encode how densely the regions intersect. Correlation alone does not
-establish a causal scaling law, and the observations are pooled across map
-families and methods; nevertheless, the formulation explains why
-decompositions with similar $N_R$ can have markedly different solve times.
+This difference can be explained by the structure of the GCS optimization
+problem. Each region adds state variables and constraints for that region. Each
+directed edge adds a flow variable and copies of the state variables at both
+ends of the edge. For a B\'ezier trajectory, these variables include control
+points and timing variables. The edge also adds continuity, derivative, and
+cost constraints. Therefore, increasing $N_E$ can add many variables and
+constraints to the optimization problem. A dense graph also gives the solver
+more possible routes to consider during presolve, relaxation, and rounding.
+In comparison, $N_R$ only counts the regions and does not show how many regions
+overlap. This helps explain why two decompositions with similar $N_R$ can have
+very different solve times. However, the correlation does not prove that edge
+count alone causes the increase in solve time, because the analysis combines
+different map families and both decomposition methods.
 
 \subsection{Trajectory Quality}
-Table~\ref{tab:exp-quality} reports trajectory medians and IQRs using the same
-geometry-level aggregation. Path length does not identify a uniform winner:
-the across-geometry paired median difference (ACD minus VCC) is $-0.144$, and a
-two-sided Wilcoxon test provides no evidence of a method effect
-($p_{\rm adj}=0.357$). The family-level differences are small on
-\code{flappy} and \code{narrows}, favor VCC on \code{rooms}, and favor ACD on
-\code{clustered} and \code{u\_shaped}.
+Trajectory quality shows a different comparison from runtime. Neither method
+consistently produces shorter paths, but VCC generally produces higher minimum
+clearance. The size of this difference depends on the map structure.
+Table~\ref{tab:exp-quality} reports the median values, while
+Table~\ref{tab:exp-quality-var} reports SD and IQR. Reporting them separately
+helps distinguish the typical result from occasional extreme values.
+
+The VCC stopping rule is important when interpreting this result. VCC uses 500
+samples to estimate coverage. It stops when the estimated coverage reaches
+0.96 or after 500 iterations. This does not mean that exactly 4\% of the free
+space remains uncovered, and it does not show that the remaining area consists
+of narrow passages. It is only a stopping condition based on sampled points.
+However, narrow areas or areas with few samples are less likely to form large
+visibility cliques and overlapping regions. This may partly explain why VCC
+produces larger regions and higher clearance in some maps, while still having
+connection failures in narrow passages. Therefore, coverage, connectivity, and
+clearance should be evaluated as separate properties.
 
 \begin{table}[htbp]
-\caption{Trajectory-quality metrics reported as median [Q1, Q3] across ten geometries. Failed trials are excluded from trajectory-dependent summaries.}
+\caption{Median trajectory-quality metrics across ten geometries. Failed trials are excluded from trajectory-dependent summaries.}
 \label{tab:exp-quality}
 \centering
 \scriptsize
-\setlength{\tabcolsep}{2.5pt}
-\resizebox{\textwidth}{!}{%
+\setlength{\tabcolsep}{4.0pt}
 \begin{tabular}{@{}llrrrr@{}}
 \toprule
 Map & Method & Path length & Traj. time & Min. clearance & Active regions \\
 \midrule
-Clustered & ACD & 7.62 [7.41,7.98] & 9.90 [9.78,10.48] & $7.43{\times}10^{-5}$ [$4.33{\times}10^{-5}$,$1.60{\times}10^{-4}$] & 16 [15,17.8] \\
-          & VCC & 8.52 [8.46,8.60] & 8.91 [8.62,9.14] & $8.44{\times}10^{-2}$ [$5.92{\times}10^{-2}$,$1.54{\times}10^{-1}$] & 5.5 [4.3,6.8] \\
-Narrows   & ACD & 16.35 [15.86,17.32] & 24.05 [23.90,24.43] & $3.66{\times}10^{-4}$ [$1.19{\times}10^{-4}$,$4.89{\times}10^{-4}$] & 13 [11.5,13.8] \\
-          & VCC & 16.14 [15.76,16.35] & 25.87 [24.32,26.80] & $1.08{\times}10^{-3}$ [$7.05{\times}10^{-4}$,$1.65{\times}10^{-3}$] & 9 [9,9] \\
-Rooms     & ACD & 7.55 [7.48,7.59] & 8.53 [8.19,8.68] & $1.06{\times}10^{-3}$ [$2.88{\times}10^{-4}$,$4.80{\times}10^{-3}$] & 11 [11,11.8] \\
-          & VCC & 7.16 [7.16,7.26] & 7.03 [7.02,7.06] & $4.51{\times}10^{-3}$ [$3.41{\times}10^{-3}$,$5.31{\times}10^{-3}$] & 7 [7,7.5] \\
-U-shaped  & ACD & 7.61 [7.55,8.00] & 7.96 [7.57,8.30] & $6.89{\times}10^{-4}$ [$3.03{\times}10^{-4}$,$1.58{\times}10^{-3}$] & 8 [7,9] \\
-          & VCC & 8.10 [7.85,8.30] & 8.22 [8.06,8.38] & $2.11{\times}10^{-2}$ [$1.13{\times}10^{-2}$,$3.57{\times}10^{-2}$] & 5 [5,5.5] \\
-Flappy    & ACD & 52.65 [52.56,52.76] & 71.32 [70.91,71.91] & $2.09{\times}10^{-4}$ [$7.98{\times}10^{-5}$,$4.45{\times}10^{-4}$] & 23 [23,23] \\
-          & VCC & 52.81 [52.79,52.97] & 71.15 [70.76,71.50] & $2.49{\times}10^{-4}$ [$1.34{\times}10^{-4}$,$5.37{\times}10^{-4}$] & 25 [25,25] \\
+Clustered & ACD & 7.62 & 9.90 & $7.43{\times}10^{-5}$ & 16 \\
+          & VCC & 8.52 & 8.91 & $8.44{\times}10^{-2}$ & 5.5 \\
+Narrows   & ACD & 16.35 & 24.05 & $3.66{\times}10^{-4}$ & 13 \\
+          & VCC & 16.14 & 25.87 & $1.08{\times}10^{-3}$ & 9 \\
+Rooms     & ACD & 7.55 & 8.53 & $1.06{\times}10^{-3}$ & 11 \\
+          & VCC & 7.16 & 7.03 & $4.51{\times}10^{-3}$ & 7 \\
+U-shaped  & ACD & 7.61 & 7.96 & $6.89{\times}10^{-4}$ & 8 \\
+          & VCC & 8.10 & 8.22 & $2.11{\times}10^{-2}$ & 5 \\
+Flappy    & ACD & 52.65 & 71.32 & $2.09{\times}10^{-4}$ & 23 \\
+          & VCC & 52.81 & 71.15 & $2.49{\times}10^{-4}$ & 25 \\
 \bottomrule
 \end{tabular}
-}
 \end{table}
 
-VCC has higher median minimum clearance in every family. The paired comparison
-is significant after Holm correction ($p_{\rm adj}<9.3\times10^{-6}$), but the
-effect is heterogeneous: VCC's clearance IQR is
-$[5.92\times10^{-2},1.54\times10^{-1}]$ on \code{clustered} and
-$[1.13\times10^{-2},3.57\times10^{-2}]$ on \code{u\_shaped}, compared with
-$[1.34\times10^{-4},5.37\times10^{-4}]$ on \code{flappy}. The visibility cover
-can therefore bias the optimizer toward routes supported by larger overlapping
-free-space sets, but it does not impose a clearance objective and should not be
-interpreted as a safety guarantee. Moreover, the clearance gain coexists with
-higher decomposition time and reduced stochastic reliability in constrained
-families. This is a Pareto trade-off rather than evidence that either
-decomposition dominates in trajectory quality.
+\begin{table}[htbp]
+\caption{Across-geometry variability of trajectory quality. SD is the sample standard deviation; IQR is $Q_3-Q_1$.}
+\label{tab:exp-quality-var}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4.0pt}
+\begin{tabular}{@{}lllrrrr@{}}
+\toprule
+Map & Method & Statistic & Path length & Traj. time & Min. clearance & Active regions \\
+\midrule
+Clustered & ACD & SD  & 0.517 & 0.645 & $1.01{\times}10^{-1}$ & 3.43 \\
+          &     & IQR & 0.571 & 0.695 & $1.16{\times}10^{-4}$ & 2.75 \\
+          & VCC & SD  & 0.137 & 0.611 & $6.68{\times}10^{-2}$ & 1.67 \\
+          &     & IQR & 0.141 & 0.519 & $9.52{\times}10^{-2}$ & 2.50 \\
+Narrows   & ACD & SD  & 0.914 & 0.634 & $5.86{\times}10^{-4}$ & 1.25 \\
+          &     & IQR & 1.463 & 0.531 & $3.70{\times}10^{-4}$ & 2.25 \\
+          & VCC & SD  & 0.526 & 1.769 & $1.18{\times}10^{-3}$ & 0.00 \\
+          &     & IQR & 0.586 & 2.477 & $9.43{\times}10^{-4}$ & 0.00 \\
+Rooms     & ACD & SD  & 0.143 & 0.330 & $5.08{\times}10^{-3}$ & 1.10 \\
+          &     & IQR & 0.109 & 0.482 & $4.52{\times}10^{-3}$ & 0.75 \\
+          & VCC & SD  & 0.127 & 0.149 & $1.15{\times}10^{-3}$ & 0.42 \\
+          &     & IQR & 0.106 & 0.042 & $1.91{\times}10^{-3}$ & 0.50 \\
+U-shaped  & ACD & SD  & 0.434 & 0.653 & $1.05{\times}10^{-3}$ & 1.69 \\
+          &     & IQR & 0.450 & 0.737 & $1.28{\times}10^{-3}$ & 2.00 \\
+          & VCC & SD  & 0.423 & 0.633 & $1.97{\times}10^{-2}$ & 0.49 \\
+          &     & IQR & 0.449 & 0.320 & $2.45{\times}10^{-2}$ & 0.50 \\
+Flappy    & ACD & SD  & 0.152 & 0.825 & $3.89{\times}10^{-4}$ & 0.00 \\
+          &     & IQR & 0.202 & 1.003 & $3.65{\times}10^{-4}$ & 0.00 \\
+          & VCC & SD  & 0.164 & 0.869 & $2.66{\times}10^{-4}$ & 0.00 \\
+          &     & IQR & 0.175 & 0.747 & $4.03{\times}10^{-4}$ & 0.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
-Relaxation behavior provides a second distinction. The corridor-like graphs in
-the \code{flappy} family admit few meaningful route alternatives, so their relaxed
-and rounded objectives remain close. In more highly connected
-\code{clustered} graphs, fractional flow can distribute over competing routes,
-increasing the relaxation--rounding gap even after VCC reduces graph size.
-Hence, graph compactness, relaxation tightness, and geometric clearance are
-related but non-equivalent properties of a decomposition.
+The path-length results differ across the map families. VCC has a longer median
+path on \code{clustered} and \code{u\_shaped}, a shorter median path on
+\code{narrows} and \code{rooms}, and almost the same median path as ACD on
+\code{flappy}. Thus, the results do not show that either method generally
+produces shorter paths. The decomposition changes the routes available to the
+optimizer, and its effect depends on the map structure.
 
-\subsection{Visual Evidence on Flappy Maps}
-The \code{flappy} family provides a qualitative stress test because every route
-must alternate between upper and lower openings. Figure~\ref{fig:exp-flappy}
-shows four representative geometries. Both decompositions preserve the
-mandatory corridor sequence, consistent with their nearly equal median path
-lengths (52.65 for ACD and 52.81 for VCC) and traversal times (71.32~s and
-71.15~s). The images therefore corroborate geometric feasibility and route
-similarity, but they do not establish statistical equivalence.
+Minimum clearance has a clearer pattern. VCC has a higher median than ACD in all
+five map families. The difference is large on \code{clustered} and
+\code{u\_shaped}, where large visibility regions give the trajectory more room
+to stay away from obstacle boundaries. The difference is small on
+\code{flappy}, because the narrow corridor leaves little space for either
+method to change the route.
+
+SD and IQR show whether the variation is common across geometries or caused by
+a few extreme cases. For ACD on \code{clustered}, the clearance SD is
+$1.01\times10^{-1}$, while the IQR is only $1.16\times10^{-4}$. This large
+difference suggests that a small number of extreme values increase the SD. For
+VCC on \code{u\_shaped}, the SD is $1.97\times10^{-2}$ and the IQR is
+$2.45\times10^{-2}$. In this case, the clearance varies across many of the
+geometries, not only a few extreme cases. Overall, VCC improves clearance in
+some map families, but it also requires more decomposition time and is less
+reliable in narrow passages. Therefore, neither method is better in every
+aspect.
+
+The relaxation results lead to the same conclusion. The chain-like
+\code{flappy} graphs contain few alternative routes, so the relaxed and rounded
+objective values remain close. The more connected \code{clustered} graphs
+contain more alternative routes, and the relaxed flow can be divided among
+them. Therefore, reducing the number of regions or edges does not always reduce
+the difference between the relaxed and rounded solutions. Graph size,
+relaxation quality, clearance, and total runtime should be evaluated
+separately.
+
+\subsection{Visual Evidence Across Map Families}
+Figures~\ref{fig:exp-visual-cluster-narrow}--\ref{fig:exp-visual-flappy}
+show ACD and VCC results for all five map families. In each row, the two panels
+use the same obstacles, start point, and goal point. Only the decomposition
+method changes. The VCC seed identifies one random VCC run on the same map, not
+a different map. The region counts shown in the figures are from individual
+runs. They are therefore different from the family medians reported in
+Tables~\ref{tab:exp-runtime} and~\ref{tab:exp-quality}.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.48\textwidth]{5-Experimental-results/figures/flappy_seed0_comparison.png}
-\includegraphics[width=0.48\textwidth]{5-Experimental-results/figures/flappy_seed1_comparison.png}
-\includegraphics[width=0.48\textwidth]{5-Experimental-results/figures/flappy_seed2_comparison.png}
-\includegraphics[width=0.48\textwidth]{5-Experimental-results/figures/flappy_seed3_comparison.png}
-% \includegraphics[width=0.48\textwidth]{5-Experimental-results/figures/flappy_seed4_comparison.png}
-\caption{ACD and VCC comparisons on four representative \code{flappy} geometries. Obstacles are black, convex regions are colored, and the GCS trajectory is plotted in blue.}
-\label{fig:exp-flappy}
+\begin{tabular}{cc}
+\includegraphics[width=0.43\textwidth]{5-Experimental-results/figures/visual_clustering_acd_map.png} &
+\includegraphics[width=0.43\textwidth]{5-Experimental-results/figures/visual_clustering_vcc_map.png} \\
+\scriptsize (a) Clustered seed 10: ACD & \scriptsize (b) Clustered seed 10: VCC seed 107 \\
+\includegraphics[width=0.43\textwidth]{5-Experimental-results/figures/visual_narrows_acd_map.png} &
+\includegraphics[width=0.43\textwidth]{5-Experimental-results/figures/visual_narrows_vcc_map.png} \\
+\scriptsize (c) Narrows seed 9: ACD & \scriptsize (d) Narrows seed 9: VCC seed 94 \\
+\end{tabular}
+\caption{Rounded GCS trajectories for clustered and narrow-passage maps. Black polygons are obstacles, colored polygons are convex regions, green and orange markers indicate the start and goal, and blue curves are the rounded trajectories. The clustered seed-10 map is shown only as a visual example because it is outside the seed-0--9 statistical set.}
+\label{fig:exp-visual-cluster-narrow}
 \end{figure}
 
-The principal difference is computational rather than geometric. ACD's median
-end-to-end time is 2.08~s (IQR $[2.07,2.13]$~s), whereas VCC requires 21.87~s
-(IQR $[21.75,22.19]$~s), almost entirely because of decomposition. Since both
-methods induce the same median graph size ($N_R=25$, $N_E=24$), this family is
-a controlled example in which VCC pays its sampling and clique-cover overhead
-without obtaining a smaller online optimization problem.
+The clustered example helps explain why VCC has a shorter solve time for this
+map family. ACD divides the free space into many small regions, and its path
+passes through several small intersections near the center of the map. VCC uses
+fewer and larger regions, and its path follows a wider route around the side.
+This is consistent with the family-level results: VCC reduces the median edge
+count from 433 to 50 and the median solve time from 102.63~s to 3.74~s. Its path
+also has more clearance but is slightly longer. Because seed 10 is outside the
+statistical set, this figure is used only to illustrate the geometry.
+
+The example also shows how region boundaries can affect the trajectory. ACD
+adds cuts when it divides a non-convex area. Some of the resulting region
+boundaries can be close to obstacles. If a GCS route crosses several of these
+boundaries, they can limit where two adjacent B\'ezier segments connect and may
+move the rounded path closer to an obstacle. The larger overlapping VCC regions
+give the optimizer more space to choose these connection points. This agrees
+with the higher minimum clearance measured for VCC. However, this figure does
+not prove that ACD generally produces less smooth paths, and the experiment does
+not compare the methods in terms of shortest-path optimality. The narrow-passage
+example below shows another limit of large visibility regions.
+
+In the \code{narrows} example, both methods must pass through the same sequence
+of narrow openings, and their trajectories have similar shapes. VCC changes the
+regions that support the path, but it cannot remove these required openings.
+For this reason, VCC does not reduce the median graph size for this map family.
+The example also shows why a high overall coverage value is not enough: if VCC
+does not create an overlap at one required opening, the region graph may not
+connect the start to the goal.
+
+\begin{figure}[htbp]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.43\textwidth]{5-Experimental-results/figures/visual_rooms_acd_map.png} &
+\includegraphics[width=0.43\textwidth]{5-Experimental-results/figures/visual_rooms_vcc_map.png} \\
+\scriptsize (a) Rooms seed 0: ACD & \scriptsize (b) Rooms seed 0: VCC seed 2 \\
+\includegraphics[width=0.43\textwidth]{5-Experimental-results/figures/visual_u_shaped_acd_map.png} &
+\includegraphics[width=0.43\textwidth]{5-Experimental-results/figures/visual_u_shaped_vcc_map.png} \\
+\scriptsize (c) U-shaped seed 2: ACD & \scriptsize (d) U-shaped seed 2: VCC seed 20 \\
+\end{tabular}
+\caption{Rounded GCS trajectories for rooms and U-shaped maps. Each row uses the same map geometry for ACD and VCC; only the decomposition method changes.}
+\label{fig:exp-visual-rooms-u}
+\end{figure}
+
+In the \code{rooms} example, both trajectories enter through the lower corridor
+and turn upward through the same doorway. VCC describes this free space with
+larger regions. For the full map family, VCC reduces the median edge count from
+52 to 16.8 and the median solve time from 3.78~s to 0.48~s. In the
+\code{u\_shaped} example, both paths follow the lower boundary and leave through
+the opening on the right. VCC uses fewer regions, but its family-level median
+edge count increases from 32.5 to 43.3. One possible reason is that a large
+region can overlap several other regions, even if the final trajectory uses
+only a few of them. A plotted trajectory does not show every edge in the graph,
+so the graph may be dense even when the selected path looks simple.
+
+\begin{figure}[htbp]
+\centering
+\begin{tabular}{cc}
+\includegraphics[width=0.45\textwidth]{5-Experimental-results/figures/visual_flappy_acd_map.png} &
+\includegraphics[width=0.45\textwidth]{5-Experimental-results/figures/visual_flappy_vcc_map.png} \\
+\scriptsize (a) Flappy seed 0: ACD & \scriptsize (b) Flappy seed 0: VCC seed 0 \\
+\end{tabular}
+\caption{Rounded trajectories for the same flappy map. Both methods must pass through the gates in the same order, and both selected runs contain 25 regions.}
+\label{fig:exp-visual-flappy}
+\end{figure}
+
+Finally, the \code{flappy} example gives a case in which both methods produce
+almost the same result. Their regions differ in some locations, but both paths
+pass through the gates in the same order, and both selected runs contain 25
+regions. This agrees with the small family-level differences in path length and
+trajectory time. However, VCC takes about ten times longer from decomposition
+to final trajectory. Since it does not reduce the graph size or clearly improve
+the trajectory in this family, most of this additional time comes from the VCC
+decomposition stage.
 
 \subsection{Discussion and Limitations}
 The experiments identify the induced edge structure, rather than the number of
@@ -289,10 +417,10 @@ workspace scale, density level, obstacle-size level, VCC sample budget (500),
 and coverage target (0.96). Second, the supplied summary CSVs retain quartiles
 and population variance but omit trial-level certificate fields and failure
 messages; consequently, the proposed narrow-gateway mechanism cannot be
-verified without the raw logs. Third, the reported Wilcoxon tests operate on
-geometry-level VCC medians to avoid pseudoreplication, but larger geometry sets
-and paired bootstrap confidence intervals are needed for precise effect
-estimation within each family. Finally, sampled minimum clearance is sensitive
+verified without the raw logs. Third, each family contains only ten geometries;
+the reported medians, SDs, and IQRs describe this benchmark but do not establish
+that the same differences will hold for a broader set of maps. Finally, sampled
+minimum clearance is sensitive
 to trajectory discretization and is not a continuous-time collision
 certificate. Future experiments should vary sampling budget, target coverage,
 workspace scale, and obstacle density; retain stage-resolved failures; evaluate
