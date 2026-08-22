@@ -4,30 +4,58 @@
 \providecommand{\doi}[1]{https://doi.org/#1}
 
 \bibitem{DeitsTedrake2014}
-Deits, R., Tedrake, R.: Computing large convex regions of obstacle-free space through semidefinite programming. In: Algorithmic Foundations of Robotics XI, Springer Tracts in Advanced Robotics, vol.~107. Springer (2015). \doi{10.1007/978-3-319-16595-0_7}, \url{https://groups.csail.mit.edu/robotics-center/public_papers/Deits14.pdf}
+Deits, R., Tedrake, R.: Computing large convex regions of obstacle-free space
+  through semidefinite programming. In: Algorithmic Foundations of Robotics XI,
+  Springer Tracts in Advanced Robotics, vol.~107. Springer (2015).
+  \doi{10.1007/978-3-319-16595-0_7},
+  \url{https://groups.csail.mit.edu/robotics-center/public_papers/Deits14.pdf}
 
 \bibitem{KavrakiEtAl1996}
-Kavraki, L.E., Svestka, P., Latombe, J.C., Overmars, M.H.: Probabilistic roadmaps for path planning in high-dimensional configuration spaces. IEEE Transactions on Robotics and Automation  \textbf{12}(4),  566--580 (1996). \doi{10.1109/70.508439}
+Kavraki, L.E., Svestka, P., Latombe, J.C., Overmars, M.H.: Probabilistic
+  roadmaps for path planning in high-dimensional configuration spaces. IEEE
+  Transactions on Robotics and Automation  \textbf{12}(4),  566--580 (1996).
+  \doi{10.1109/70.508439}
 
 \bibitem{LaValle1998}
-LaValle, S.M.: Rapidly-exploring random trees: A new tool for path planning. Tech. Rep. TR 98-11, Iowa State University (1998)
+LaValle, S.M.: Rapidly-exploring random trees: A new tool for path planning.
+  Tech. Rep. TR 98-11, Iowa State University (1998)
 
 \bibitem{LienAmato2006}
-Lien, J.M., Amato, N.M.: Approximate convex decomposition of polygons. Computational Geometry: Theory and Applications  \textbf{35}(1--2),  100--123 (2006). \doi{10.1016/j.comgeo.2005.10.005}
+Lien, J.M., Amato, N.M.: Approximate convex decomposition of polygons.
+  Computational Geometry: Theory and Applications  \textbf{35}(1--2),  100--123
+  (2006). \doi{10.1016/j.comgeo.2005.10.005}
 
 \bibitem{MarcucciEtAl2023MotionPlanning}
-Marcucci, T., Petersen, M., von Wrangell, D., Tedrake, R.: Motion planning around obstacles with convex optimization. Science Robotics  \textbf{8}(84) (2023). \doi{10.1126/scirobotics.adf7843}, \url{https://arxiv.org/abs/2205.04422}
+Marcucci, T., Petersen, M., von Wrangell, D., Tedrake, R.: Motion planning
+  around obstacles with convex optimization. Science Robotics  \textbf{8}(84)
+  (2023). \doi{10.1126/scirobotics.adf7843},
+  \url{https://arxiv.org/abs/2205.04422}
 
 \bibitem{MarcucciEtAl2023GCS}
-Marcucci, T., Umenberger, J., Parrilo, P.A., Tedrake, R.: Shortest paths in graphs of convex sets. SIAM Journal on Optimization  \textbf{34}(1),  507--532 (2024). \doi{10.1137/22M1523790}, \url{https://arxiv.org/abs/2101.11565}
+Marcucci, T., Umenberger, J., Parrilo, P.A., Tedrake, R.: Shortest paths in
+  graphs of convex sets. SIAM Journal on Optimization  \textbf{34}(1),
+  507--532 (2024). \doi{10.1137/22M1523790},
+  \url{https://arxiv.org/abs/2101.11565}
 
 \bibitem{Schulman2014_TrajOpt}
-Schulman, J., Duan, Y., Ho, J., Lee, A., Awwal, I., Bradlow, H., Pan, J., Patil, S., Goldberg, K., Abbeel, P.: Motion planning with sequential convex optimization and convex collision checking. The International Journal of Robotics Research  \textbf{33}(9),  1251--1270 (2014). \doi{10.1177/0278364914528132}
+Schulman, J., Duan, Y., Ho, J., Lee, A., Awwal, I., Bradlow, H., Pan, J.,
+  Patil, S., Goldberg, K., Abbeel, P.: Motion planning with sequential convex
+  optimization and convex collision checking. The International Journal of
+  Robotics Research  \textbf{33}(9),  1251--1270 (2014).
+  \doi{10.1177/0278364914528132}
 
 \bibitem{DeitsTedrake2023VCC}
-Werner, P., Amice, A., Marcucci, T., Rus, D., Tedrake, R.: Approximating robot configuration spaces with few convex sets using clique covers of visibility graphs. In: 2024 IEEE International Conference on Robotics and Automation (ICRA). pp. 10359--10365 (2024). \doi{10.1109/ICRA57147.2024.10610005}, \url{https://arxiv.org/abs/2310.02875}
+Werner, P., Amice, A., Marcucci, T., Rus, D., Tedrake, R.: Approximating robot
+  configuration spaces with few convex sets using clique covers of visibility
+  graphs. In: 2024 IEEE International Conference on Robotics and Automation
+  (ICRA). pp. 10359--10365 (2024). \doi{10.1109/ICRA57147.2024.10610005},
+  \url{https://arxiv.org/abs/2310.02875}
 
 \bibitem{Zucker2013_CHOMP}
-Zucker, M., Ratliff, N., Dragan, A.D., Pivtoraiko, M., Klingensmith, M., Dellin, C.M., Bagnell, J.A., Srinivasa, S.S.: {CHOMP}: Covariant {H}amiltonian optimization for motion planning. The International Journal of Robotics Research  \textbf{32}(9--10),  1164--1193 (2013). \doi{10.1177/0278364913488805}
+Zucker, M., Ratliff, N., Dragan, A.D., Pivtoraiko, M., Klingensmith, M.,
+  Dellin, C.M., Bagnell, J.A., Srinivasa, S.S.: {CHOMP}: Covariant
+  {H}amiltonian optimization for motion planning. The International Journal of
+  Robotics Research  \textbf{32}(9--10),  1164--1193 (2013).
+  \doi{10.1177/0278364913488805}
 
 \end{thebibliography}
