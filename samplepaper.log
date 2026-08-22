@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.15)  22 AUG 2026 08:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.15)  22 AUG 2026 10:18
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -740,42 +740,62 @@ LaTeX Font Info:    Trying to load font information for T5+cmtt on input line 67
 File: t5cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 ) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] (./2-Techical-background/vi-technical-background.tex [2] [3]) (./3-Integrated-Framework-GCS/integrated-framework.tex
-Underfull \vbox (badness 1365) has occurred while \output is active []
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] (./2-Techical-background/vi-technical-background.tex [2]
+<image/ACD_algo_a.png, id=27, 707.64375pt x 550.055pt>
+File: image/ACD_algo_a.png Graphic file (type png)
+<use image/ACD_algo_a.png>
+Package pdftex.def Info: image/ACD_algo_a.png  used on input line 63.
+(pdftex.def)             Requested size: 131.90863pt x 102.53075pt.
+<image/ACD_algo_b.png, id=28, 1752.5475pt x 904.37875pt>
+File: image/ACD_algo_b.png Graphic file (type png)
+<use image/ACD_algo_b.png>
+Package pdftex.def Info: image/ACD_algo_b.png  used on input line 68.
+(pdftex.def)             Requested size: 197.86295pt x 102.10391pt.
 
- [4] [5] [6]) (./5-Experimental-results/experimental-results-and-discussion.tex [7]
-<5-Experimental-results/figures/correlation_panels.pdf, id=52, 875.67104pt x 521.54805pt>
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [3]
+<image/VCC-pipeline.png, id=33, 1617.04124pt x 285.065pt>
+File: image/VCC-pipeline.png Graphic file (type png)
+<use image/VCC-pipeline.png>
+Package pdftex.def Info: image/VCC-pipeline.png  used on input line 104.
+(pdftex.def)             Requested size: 347.12354pt x 61.19208pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [4 <./image/ACD_algo_a.png (PNG copy)> <./image/ACD_algo_b.png (PNG copy)>]) (./3-Integrated-Framework-GCS/integrated-framework.tex [5 <./image/VCC-pipeline.png>] [6] [7]) (./5-Experimental-results/experimental-results-and-discussion.tex [8]
+<5-Experimental-results/figures/correlation_panels.pdf, id=63, 875.67104pt x 521.54805pt>
 File: 5-Experimental-results/figures/correlation_panels.pdf Graphic file (type pdf)
 <use 5-Experimental-results/figures/correlation_panels.pdf>
 Package pdftex.def Info: 5-Experimental-results/figures/correlation_panels.pdf  used on input line 44.
 (pdftex.def)             Requested size: 347.12354pt x 206.74535pt.
- [8] [9 <./5-Experimental-results/figures/correlation_panels.pdf>]
-<5-Experimental-results/figures/flappy_seed0_comparison.png, id=201, 2362.8275pt x 1545.775pt>
+ [9] [10 <./5-Experimental-results/figures/correlation_panels.pdf>]
+<5-Experimental-results/figures/flappy_seed0_comparison.png, id=212, 2362.8275pt x 1545.775pt>
 File: 5-Experimental-results/figures/flappy_seed0_comparison.png Graphic file (type png)
 <use 5-Experimental-results/figures/flappy_seed0_comparison.png>
 Package pdftex.def Info: 5-Experimental-results/figures/flappy_seed0_comparison.png  used on input line 85.
 (pdftex.def)             Requested size: 166.61781pt x 108.99365pt.
-<5-Experimental-results/figures/flappy_seed1_comparison.png, id=202, 2362.8275pt x 1545.775pt>
+<5-Experimental-results/figures/flappy_seed1_comparison.png, id=213, 2362.8275pt x 1545.775pt>
 File: 5-Experimental-results/figures/flappy_seed1_comparison.png Graphic file (type png)
 <use 5-Experimental-results/figures/flappy_seed1_comparison.png>
 Package pdftex.def Info: 5-Experimental-results/figures/flappy_seed1_comparison.png  used on input line 86.
 (pdftex.def)             Requested size: 166.61781pt x 108.99365pt.
-<5-Experimental-results/figures/flappy_seed2_comparison.png, id=203, 2362.8275pt x 1545.775pt>
+<5-Experimental-results/figures/flappy_seed2_comparison.png, id=214, 2362.8275pt x 1545.775pt>
 File: 5-Experimental-results/figures/flappy_seed2_comparison.png Graphic file (type png)
 <use 5-Experimental-results/figures/flappy_seed2_comparison.png>
 Package pdftex.def Info: 5-Experimental-results/figures/flappy_seed2_comparison.png  used on input line 87.
 (pdftex.def)             Requested size: 166.61781pt x 108.99365pt.
-<5-Experimental-results/figures/flappy_seed3_comparison.png, id=204, 2362.8275pt x 1545.775pt>
+<5-Experimental-results/figures/flappy_seed3_comparison.png, id=215, 2362.8275pt x 1545.775pt>
 File: 5-Experimental-results/figures/flappy_seed3_comparison.png Graphic file (type png)
 <use 5-Experimental-results/figures/flappy_seed3_comparison.png>
 Package pdftex.def Info: 5-Experimental-results/figures/flappy_seed3_comparison.png  used on input line 88.
 (pdftex.def)             Requested size: 166.61781pt x 108.99365pt.
-<5-Experimental-results/figures/flappy_seed4_comparison.png, id=205, 2362.8275pt x 1545.775pt>
+<5-Experimental-results/figures/flappy_seed4_comparison.png, id=216, 2362.8275pt x 1545.775pt>
 File: 5-Experimental-results/figures/flappy_seed4_comparison.png Graphic file (type png)
 <use 5-Experimental-results/figures/flappy_seed4_comparison.png>
 Package pdftex.def Info: 5-Experimental-results/figures/flappy_seed4_comparison.png  used on input line 89.
 (pdftex.def)             Requested size: 166.61781pt x 108.99365pt.
-) [10] [11 <./5-Experimental-results/figures/flappy_seed0_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed1_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed2_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed3_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed4_comparison.png (PNG copy)>] (./samplepaper.bbl
+) [11] [12 <./5-Experimental-results/figures/flappy_seed0_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed1_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed2_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed3_comparison.png (PNG copy)> <./5-Experimental-results/figures/flappy_seed4_comparison.png (PNG copy)>] (./samplepaper.bbl
 Underfull \hbox (badness 3907) in paragraph at lines 7--8
 []\T5/cmr/m/n/9 Deits, R., Tedrake, R.: Com-put-ing large con-vex re-gions of obstacle-free
  []
@@ -815,27 +835,27 @@ Underfull \hbox (badness 1881) in paragraph at lines 19--20
 []\T5/cmr/m/n/9 Marcucci, T., Pe-tersen, M., von Wrangell, D., Tedrake, R.: Mo-tion plan-
  []
 
-[12
+[13
 
-]) [13] (./samplepaper.aux)
+]) [14] (./samplepaper.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 16875 strings out of 474222
- 335006 string characters out of 5748732
- 1938975 words of memory out of 5000000
- 38803 multiletter control sequences out of 15000+600000
- 575137 words of font info for 74 fonts, out of 8000000 for 9000
+ 16791 strings out of 474222
+ 333787 string characters out of 5748732
+ 1937975 words of memory out of 5000000
+ 38718 multiletter control sequences out of 15000+600000
+ 575960 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,10n,93p,854b,897s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vntt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vntt9.pfb>
-Output written on samplepaper.pdf (13 pages, 2434472 bytes).
+ 84i,10n,93p,854b,892s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vnti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vntt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/vntex/vnr/vntt9.pfb>
+Output written on samplepaper.pdf (14 pages, 4728820 bytes).
 PDF statistics:
- 320 PDF objects out of 1000 (max. 8388607)
- 124 compressed objects within 2 object streams
+ 343 PDF objects out of 1000 (max. 8388607)
+ 136 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 43 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 58 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -58,46 +58,24 @@ more local pieces, whereas a larger tolerance suppresses minor features.
 
 \begin{figure}[H]
   \centering
-  \begin{tikzpicture}[
-      x=.85cm, y=.75cm, >=Latex,
-      line cap=round, line join=round,
-      every node/.style={font=\scriptsize, align=center}]
-    \begin{scope}
-      \filldraw[fill=blue!9, draw=blue!55!black, thick]
-        (0,0) -- (4.4,0) -- (4.4,3) -- (2.95,3) --
-        (2.35,1.80) -- (1.65,3) -- (0,3) -- cycle;
-      \draw[densely dashed, gray!80, thick] (1.65,3) -- (2.95,3);
-      \draw[<->, teal!70!black, semithick]
-        (2.35,1.94) -- (2.35,2.88);
-      \fill[red!75!black] (2.35,1.80) circle (1.35pt);
-
-      \node at (0.86,0.55) {$P$\\non-convex piece};
-      \node[above=2pt, text=gray!80] at (2.30,3) {convex-hull bridge};
-      \node[right=2pt, text=teal!70!black] at (2.38,2.42) {concave pocket};
-      \node[below=1pt, font=\tiny] at (2.35,1.80) {reflex vertex};
-      \node[below] at (2.20,-.55) {(a) identify a concave pocket};
-    \end{scope}
-    \draw[->, very thick] (4.82,1.50) -- (6.06,1.50);
-    \node[above=2pt, font=\scriptsize] at (5.44,1.50) {interior cut};
-
-    \begin{scope}[shift={(6.80,0)}]
-      \filldraw[fill=blue!11, draw=blue!55!black, thick]
-        (0,0) -- (2.15,0) -- (2.35,1.80) -- (1.65,3) --
-        (0,3) -- cycle;
-      \filldraw[fill=orange!18, draw=orange!75!black, thick]
-        (2.15,0) -- (4.4,0) -- (4.4,3) -- (2.95,3) --
-        (2.35,1.80) -- cycle;
-      \draw[red!70!black, very thick] (2.15,0) -- (2.35,1.80);
-      \node at (0.82,1.28) {$Q_1$};
-      \node at (3.45,1.30) {$Q_2$};
-      \node[right=2pt, text=red!70!black, align=left] at (2.20,.82)
-        {shared\\interface};
-      \node[below] at (2.20,-.55) {(b) two convex regions};
-    \end{scope}
-  \end{tikzpicture}
-  \caption{Conceptual ACD step. A convex-hull bridge exposes a concave
-  pocket; an interior cut from its selected reflex vertex produces two convex
-  regions with a shared interface.}
+  \begin{minipage}[b]{0.38\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{image/ACD_algo_a.png}\\[-2pt]
+    \textit{(a)}
+  \end{minipage}\hfill
+  \begin{minipage}[b]{0.57\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{image/ACD_algo_b.png}\\[-2pt]
+    \textit{(b)}
+  \end{minipage}
+  \caption{Approximate convex decomposition. (a) ACD evaluates the concavity
+  $c(P)$ of each polygonal component. If the concavity is below the prescribed
+  threshold, the component is accepted; otherwise, the dominant reflex notch
+  $r$ is resolved to produce $P_1$ and $P_2$, which are processed recursively.
+  (b) The dashed boundary $H_P$ denotes the convex hull used to measure the
+  concavity at $r$; successive cuts decompose $P$ into smaller approximately
+  convex components. The symbol $\tau$ in panel~(a) denotes the local ACD
+  tolerance. \cite{LienAmato2006}}
   \label{fig:acd-step}
 \end{figure}
 
@@ -123,76 +101,15 @@ collision-free region~\cite{DeitsTedrake2014}.
 
 \begin{figure}[H]
   \centering
-  \begin{tikzpicture}[
-      x=.70cm, y=.70cm, >=Latex,
-      line cap=round, line join=round,
-      obstacle/.style={fill=black!32, draw=black, semithick},
-      sample/.style={circle, fill=teal!70!black, draw=teal!45!black,
-        inner sep=1.25pt},
-      seed/.style={circle, fill=green!65!black, draw=green!35!black,
-        inner sep=1.55pt},
-      cliqueedge/.style={draw=teal!55!black, thin},
-      plane/.style={draw=magenta!85!black, densely dashed, semithick},
-      region/.style={draw=red!75!black, very thick},
-      ellipsoid/.style={draw=blue!70!black, very thick},
-      callout/.style={->, thin, black!70},
-      every node/.style={font=\scriptsize}]
-    % Reused obstacles make the VCC-to-IRIS progression explicit.
-    \def\vccscene{%
-      \draw[black!50, semithick] (0,0) rectangle (6,3.55);
-      \path[obstacle] (.28,2.40) -- (.98,3.15) -- (1.58,2.70) --
-        (1.17,2.08) -- cycle;
-      \path[obstacle] (2.00,3.18) -- (2.75,3.46) -- (3.18,2.97) --
-        (2.55,2.72) -- cycle;
-      \path[obstacle] (5.03,2.67) -- (5.70,3.05) -- (5.85,2.24) --
-        (5.35,1.99) -- cycle;
-      \path[obstacle] (.38,.36) -- (1.02,.83) -- (.80,.15) -- cycle;
-      \path[obstacle] (2.00,.10) -- (2.93,.28) -- (2.54,.62) --
-        (1.84,.43) -- cycle;
-      \path[obstacle] (4.80,.32) -- (5.70,.72) -- (5.36,1.17) --
-        (4.56,.84) -- cycle;}
-
-    % (a) Mutually visible samples define a clique-derived seed.
-    \begin{scope}
-      \vccscene
-      \coordinate (q1) at (2.25,1.30);
-      \coordinate (q2) at (2.70,1.25);
-      \coordinate (q3) at (3.05,1.72);
-      \coordinate (q4) at (2.43,1.98);
-      \draw[cliqueedge] (q1) -- (q2) -- (q3) -- (q4) -- cycle
-        (q1) -- (q3) (q2) -- (q4);
-      \foreach \q in {q1,q2,q3,q4} \node[sample] at (\q) {};
-      \draw[ellipsoid] (2.67,1.58) ellipse (.77 and .47);
-      \node[seed] at (2.67,1.58) {};
-      \node[below=2pt] at (2.67,1.58) {$x_0$};
-      \node[anchor=west, fill=white, inner sep=1pt] (cl) at (3.48,3.17)
-        {visibility clique};
-      \draw[callout] (cl.west) -- (3.03,1.80);
-      \node at (3,-.32) {(a) clique-derived seed};
-    \end{scope}
-    \draw[->, very thick] (6.20,1.75) -- (7.05,1.75)
-      node[midway, above, font=\scriptsize] {IRIS iterations};
-
-    % (b) Alternating separation and ellipsoid inflation.
-    \begin{scope}[xshift=5.20cm]
-      \vccscene
-      \draw[plane] (.92,.02) -- (2.02,3.53);
-      \draw[plane] (.05,2.55) -- (5.95,2.55);
-      \draw[plane] (3.60,3.53) -- (5.82,.18);
-      \draw[plane] (.05,.78) -- (5.95,.78);
-      \filldraw[fill=red!5, region]
-        (1.30,.85) -- (1.75,2.55) -- (4.28,2.55) -- (4.95,1.55) --
-        (4.08,.78) -- (2.15,.78) -- cycle;
-      \draw[ellipsoid] (3.15,1.60) ellipse (1.28 and .67);
-      \node[seed] at (3.15,1.60) {};
-      \node at (3,-.32) {(b) certified convex region};
-    \end{scope}
-  \end{tikzpicture}
-  \caption{Conceptual VCC and IRIS-style inflation. Teal points and edges form
-  a visibility clique; its seed (green) is inflated by alternating obstacle-
-  separating hyperplanes (magenta dashed) and maximum-volume ellipsoid updates
-  (blue), yielding the collision-free convex polytope (red).}
-  \label{fig:vcc-inflation}
+  \includegraphics[width=\linewidth]{image/VCC-pipeline.png}
+  \caption{Visibility Clique Cover pipeline. A visibility graph is constructed
+  from collision-free samples and covered by groups of mutually visible
+  vertices. Each visibility clique initializes an ellipsoidal seed, which is
+  expanded by IRIS-style inflation into a collision-free convex polytope.
+  Sampling, clique construction, and region inflation are repeated to improve
+  free-space coverage, producing the final collection of overlapping convex
+  regions.}
+  \label{fig:vcc-pipeline}
 \end{figure}
 
 The resulting polytopes can be larger than local ACD pieces and may overlap.
