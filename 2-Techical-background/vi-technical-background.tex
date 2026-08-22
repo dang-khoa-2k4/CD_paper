@@ -1,73 +1,207 @@
 \section{Technical Background}
 \label{sec:technical-background}
 
-\subsection{Convex Free-Space Covers for GCS--B\'ezier}
+\subsection{Convex Free-Space Covers and Graphs of Convex Sets}
 \label{sec:convex-free-space}
 
-Obstacle avoidance makes motion planning difficult because the free
-configuration space $\mathcal{C}_{\mathrm{free}}$ is generally non-convex.
-The GCS--B\'ezier approach addresses this difficulty by representing the
-part of $\mathcal{C}_{\mathrm{free}}$ relevant to a query with a finite
-collection of collision-free convex regions,
-\[
-  \mathcal{Q}=\{Q_i\}_{i=1}^{N_R}, \qquad
-  Q_i \subseteq \mathcal{C}_{\mathrm{free}}.
-\]
-The regions may overlap. They induce a graph with one vertex per region and an
-edge for each feasible transition between adjacent regions. The start and goal
-are connected to the regions that contain them or can be reached from them.
+Obstacle avoidance is difficult because the free configuration space
+$\mathcal{C}_{\mathrm{free}}$ is generally non-convex.  The GCS--B\'ezier
+approach represents the portion relevant to a planning query by a finite cover
+of collision-free convex regions,
+\begin{equation}
+  \mathcal{Q}=\{Q_i\}_{i=1}^{N_R},\qquad
+  Q_i\subseteq\mathcal{C}_{\mathrm{free}},\qquad
+  N_R=|\mathcal{Q}|.
+  \label{eq:convex-cover}
+\end{equation}
+For each query, the cover includes designated regions
+$Q_\sigma,Q_\tau\in\mathcal{Q}$ such that
+$\mathbf{x}_{\mathrm{start}}\in Q_\sigma$ and
+$\mathbf{x}_{\mathrm{goal}}\in Q_\tau$.
 
-Graphs of Convex Sets (GCS) jointly optimize the discrete route through this
-graph and the continuous trajectory variables associated with the selected
-regions~\cite{MarcucciEtAl2023GCS,MarcucciEtAl2023MotionPlanning}. In the
-GCS--B\'ezier formulation, a trajectory segment is represented by B\'ezier
-control points constrained to its assigned region. By the convex-hull property
-of B\'ezier curves, this containment certifies collision freedom for the whole
-segment rather than only for sampled points.
+The cover induces a directed Graph of Convex Sets (GCS),
+$G=(V,E)$.  Each vertex $v_i\in V$ represents $Q_i$, so
+$|V|=N_R$, and each directed edge represents a feasible transition between
+two regions.  We write $N_E=|E|$ for the number of such transitions.  In
+particular, an edge is considered only when the two regions have a nonempty
+common interface and the associated trajectory-compatibility constraints can
+be satisfied.  GCS then jointly chooses a route from $\sigma$ to $\tau$ and
+the continuous trajectory variables in the selected regions
+~\cite{MarcucciEtAl2023GCS,MarcucciEtAl2023MotionPlanning}.
 
-Consequently, decomposition is not merely a preprocessing step. It determines
-the number of graph vertices $N_R$, the number of feasible transitions $N_E$,
-and the size of the resulting convex optimization model. A cover with fewer
-regions is not necessarily easier to solve: large or highly overlapping regions
-can induce a dense transition graph. This motivates evaluating decomposition
-methods through their downstream GCS model and trajectory, not through region
-count alone.
+Convexity is essential: every convex combination of points in $Q_i$ remains
+collision free.  Moreover, a nonempty overlap or shared boundary between
+neighboring regions provides a candidate connection set for consecutive
+trajectory segments.  At the same time, a region that overlaps many others can
+create many graph edges.  Consequently, a cover with fewer regions need not
+produce a smaller or easier GCS problem; both $N_R$ and $N_E$ affect the
+downstream model size.
+
+In the GCS--B\'ezier formulation, a local trajectory is represented by
+B\'ezier control points constrained to its assigned region.  The convex-hull
+property of B\'ezier curves then certifies collision freedom over the whole
+segment rather than only at sampled points.  The following subsections describe
+the two cover-construction methods compared in this study.
 
 \subsection{Approximate Convex Decomposition}
 \label{sec:acd}
 
 Approximate Convex Decomposition (ACD) is a geometry-driven method for
-decomposing a non-convex polygon~\cite{LienAmato2006}. It recursively locates
-the most significant concavity, inserts a cut to resolve it, and repeats until
-the residual concavity of every component is below a user-selected tolerance
-$\tau$. The tolerance controls the granularity of the decomposition: a smaller
-$\tau$ resolves more geometric detail and usually produces more regions, whereas
-a larger $\tau$ avoids cuts associated with minor features.
+decomposing a non-convex polygon~\cite{LienAmato2006}.  In a standard
+hull-based construction, concavity is measured by how far a concave boundary
+feature lies from the polygon's convex hull.  ACD selects a prominent reflex
+notch, inserts an interior cut
+that resolves the notch, and recursively repeats this operation.  It stops when
+the residual concavity of every component is below a user-selected tolerance.
+Thus, a smaller tolerance retains finer geometric features and generally yields
+more local pieces, whereas a larger tolerance suppresses minor features.
 
-For the present study, ACD provides a direct and inexpensive way to construct
-the safe-region representation for a planar environment. Its principal
-trade-off is that resolving local geometric features can produce many regions
-and, therefore, many possible GCS transitions. This makes ACD a useful baseline
-for testing whether a faster decomposition stage offsets the cost of a larger
-downstream graph.
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      x=.85cm, y=.75cm, >=Latex,
+      line cap=round, line join=round,
+      every node/.style={font=\scriptsize, align=center}]
+    \begin{scope}
+      \filldraw[fill=blue!9, draw=blue!55!black, thick]
+        (0,0) -- (4.4,0) -- (4.4,3) -- (2.95,3) --
+        (2.35,1.80) -- (1.65,3) -- (0,3) -- cycle;
+      \draw[densely dashed, gray!80, thick] (1.65,3) -- (2.95,3);
+      \draw[<->, teal!70!black, semithick]
+        (2.35,1.94) -- (2.35,2.88);
+      \fill[red!75!black] (2.35,1.80) circle (1.35pt);
+
+      \node at (0.86,0.55) {$P$\\non-convex piece};
+      \node[above=2pt, text=gray!80] at (2.30,3) {convex-hull bridge};
+      \node[right=2pt, text=teal!70!black] at (2.38,2.42) {concave pocket};
+      \node[below=1pt, font=\tiny] at (2.35,1.80) {reflex vertex};
+      \node[below] at (2.20,-.55) {(a) identify a concave pocket};
+    \end{scope}
+    \draw[->, very thick] (4.82,1.50) -- (6.06,1.50);
+    \node[above=2pt, font=\scriptsize] at (5.44,1.50) {interior cut};
+
+    \begin{scope}[shift={(6.80,0)}]
+      \filldraw[fill=blue!11, draw=blue!55!black, thick]
+        (0,0) -- (2.15,0) -- (2.35,1.80) -- (1.65,3) --
+        (0,3) -- cycle;
+      \filldraw[fill=orange!18, draw=orange!75!black, thick]
+        (2.15,0) -- (4.4,0) -- (4.4,3) -- (2.95,3) --
+        (2.35,1.80) -- cycle;
+      \draw[red!70!black, very thick] (2.15,0) -- (2.35,1.80);
+      \node at (0.82,1.28) {$Q_1$};
+      \node at (3.45,1.30) {$Q_2$};
+      \node[right=2pt, text=red!70!black, align=left] at (2.20,.82)
+        {shared\\interface};
+      \node[below] at (2.20,-.55) {(b) two convex regions};
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Conceptual ACD step. A convex-hull bridge exposes a concave
+  pocket; an interior cut from its selected reflex vertex produces two convex
+  regions with a shared interface.}
+  \label{fig:acd-step}
+\end{figure}
+
+The cut-induced pieces meet along shared boundary portions.  When these
+interfaces admit the GCS compatibility constraints, they become edges in the
+region graph.  Therefore, resolving fine features can create numerous local
+regions and shared interfaces, increasing $N_R$ and often $N_E$.  ACD is a
+useful low-cost baseline for testing whether a fast cover-construction stage
+offsets the optimization cost of a larger downstream graph.
 
 \subsection{Visibility Clique Cover}
 \label{sec:vcc}
 
-Visibility Clique Cover (VCC) constructs a convex cover from the global
-visibility structure of the free space~\cite{DeitsTedrake2023VCC}. It first
-samples collision-free configurations and connects pairs whose straight-line
-segment remains collision free. Cliques in this visibility graph identify groups
-of mutually visible samples. Each clique initializes an ellipsoid, which is
-inflated into a collision-free convex polytope using an IRIS-style
-region-inflation step~\cite{DeitsTedrake2014}. Sampling and inflation are
-repeated until the desired coverage is reached.
+Visibility Clique Cover (VCC) constructs a cover from the global visibility
+structure of free space~\cite{DeitsTedrake2023VCC}.  It samples collision-free
+configurations and connects two samples when their straight-line segment remains
+collision free.  A clique identifies mutually visible samples that initialize a
+collision-free seed region for inflation.  Starting from an ellipsoidal seed,
+an IRIS-style region-inflation procedure alternates between computing
+obstacle-separating hyperplanes and expanding a maximum-volume ellipsoid inside
+their polytope intersection.  The converged polytope is a convex,
+collision-free region~\cite{DeitsTedrake2014}.
 
-Because it groups mutually visible samples before inflation, VCC can produce a
-small number of large regions and substantially reduce the GCS graph for some
-environments. Its cost, however, depends on the sampling budget, visibility
-tests, clique-cover computation, and coverage target. Sparse or unrepresentative
-samples can also make narrow passages difficult to cover or connect. The
-comparison in this paper therefore examines the complementary trade-off between
-ACD's inexpensive local decomposition and VCC's potentially more compact but
-costlier visibility-based cover.
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[
+      x=.70cm, y=.70cm, >=Latex,
+      line cap=round, line join=round,
+      obstacle/.style={fill=black!32, draw=black, semithick},
+      sample/.style={circle, fill=teal!70!black, draw=teal!45!black,
+        inner sep=1.25pt},
+      seed/.style={circle, fill=green!65!black, draw=green!35!black,
+        inner sep=1.55pt},
+      cliqueedge/.style={draw=teal!55!black, thin},
+      plane/.style={draw=magenta!85!black, densely dashed, semithick},
+      region/.style={draw=red!75!black, very thick},
+      ellipsoid/.style={draw=blue!70!black, very thick},
+      callout/.style={->, thin, black!70},
+      every node/.style={font=\scriptsize}]
+    % Reused obstacles make the VCC-to-IRIS progression explicit.
+    \def\vccscene{%
+      \draw[black!50, semithick] (0,0) rectangle (6,3.55);
+      \path[obstacle] (.28,2.40) -- (.98,3.15) -- (1.58,2.70) --
+        (1.17,2.08) -- cycle;
+      \path[obstacle] (2.00,3.18) -- (2.75,3.46) -- (3.18,2.97) --
+        (2.55,2.72) -- cycle;
+      \path[obstacle] (5.03,2.67) -- (5.70,3.05) -- (5.85,2.24) --
+        (5.35,1.99) -- cycle;
+      \path[obstacle] (.38,.36) -- (1.02,.83) -- (.80,.15) -- cycle;
+      \path[obstacle] (2.00,.10) -- (2.93,.28) -- (2.54,.62) --
+        (1.84,.43) -- cycle;
+      \path[obstacle] (4.80,.32) -- (5.70,.72) -- (5.36,1.17) --
+        (4.56,.84) -- cycle;}
+
+    % (a) Mutually visible samples define a clique-derived seed.
+    \begin{scope}
+      \vccscene
+      \coordinate (q1) at (2.25,1.30);
+      \coordinate (q2) at (2.70,1.25);
+      \coordinate (q3) at (3.05,1.72);
+      \coordinate (q4) at (2.43,1.98);
+      \draw[cliqueedge] (q1) -- (q2) -- (q3) -- (q4) -- cycle
+        (q1) -- (q3) (q2) -- (q4);
+      \foreach \q in {q1,q2,q3,q4} \node[sample] at (\q) {};
+      \draw[ellipsoid] (2.67,1.58) ellipse (.77 and .47);
+      \node[seed] at (2.67,1.58) {};
+      \node[below=2pt] at (2.67,1.58) {$x_0$};
+      \node[anchor=west, fill=white, inner sep=1pt] (cl) at (3.48,3.17)
+        {visibility clique};
+      \draw[callout] (cl.west) -- (3.03,1.80);
+      \node at (3,-.32) {(a) clique-derived seed};
+    \end{scope}
+    \draw[->, very thick] (6.20,1.75) -- (7.05,1.75)
+      node[midway, above, font=\scriptsize] {IRIS iterations};
+
+    % (b) Alternating separation and ellipsoid inflation.
+    \begin{scope}[xshift=5.20cm]
+      \vccscene
+      \draw[plane] (.92,.02) -- (2.02,3.53);
+      \draw[plane] (.05,2.55) -- (5.95,2.55);
+      \draw[plane] (3.60,3.53) -- (5.82,.18);
+      \draw[plane] (.05,.78) -- (5.95,.78);
+      \filldraw[fill=red!5, region]
+        (1.30,.85) -- (1.75,2.55) -- (4.28,2.55) -- (4.95,1.55) --
+        (4.08,.78) -- (2.15,.78) -- cycle;
+      \draw[ellipsoid] (3.15,1.60) ellipse (1.28 and .67);
+      \node[seed] at (3.15,1.60) {};
+      \node at (3,-.32) {(b) certified convex region};
+    \end{scope}
+  \end{tikzpicture}
+  \caption{Conceptual VCC and IRIS-style inflation. Teal points and edges form
+  a visibility clique; its seed (green) is inflated by alternating obstacle-
+  separating hyperplanes (magenta dashed) and maximum-volume ellipsoid updates
+  (blue), yielding the collision-free convex polytope (red).}
+  \label{fig:vcc-inflation}
+\end{figure}
+
+The resulting polytopes can be larger than local ACD pieces and may overlap.
+Convexity gives the optimizer freedom to place a B\'ezier segment anywhere
+within a region, while an overlap supplies a nonempty connection set for
+adjacent segments.  This can reduce the number of active regions and alter the
+shape of the optimized path.  However, extensive overlap can also create many
+candidate GCS transitions, so a compact cover does not guarantee a sparse
+region graph.  The total construction cost includes sampling and visibility
+tests as well as repeated region-inflation calls; it can increase with the sampling
+budget and coverage target.  Sparse or unrepresentative samples can make narrow
+passages difficult to cover or connect.

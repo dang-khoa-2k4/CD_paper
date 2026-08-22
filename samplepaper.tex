@@ -15,6 +15,8 @@
 %
 \usepackage{graphicx}
 \usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning,shapes.geometric}
 % Used for displaying a sample figure. If possible, figure files should
 % be included in EPS format.
 % Keep compilation usable when optional experiment figures are not checked out.
@@ -65,27 +67,24 @@ ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
 \maketitle              % typeset the header of the contribution
 %
 \begin{abstract}
-Graphs of Convex Sets (GCS) coupled with B\'ezier trajectories provide a
-convex-optimization-based framework for collision-free motion planning, but
-their practical efficiency depends strongly on the convex cover of free space.
-This paper evaluates two automatic cover-construction methods---Approximate
-Convex Decomposition (ACD) and Visibility Clique Cover (VCC)---within an
-otherwise identical GCS--B\'ezier pipeline. We test five planar map families
-with five randomized instances per family and measure decomposition cost,
-graph and model size, planning time, robustness, and trajectory quality. ACD
-solves all 25 instances, whereas VCC solves 23, with both failures occurring
-in narrow passages. VCC can markedly reduce the downstream problem: on the
-\code{clustering} maps, median region and edge counts fall from 104 to 22 and
-from 462 to 99, respectively, reducing GCS solve time from 40.10~s to
-3.10~s. However, under the tested VCC sampling configuration, its higher
-decomposition cost makes ACD faster end-to-end on every map family. Across 48
-successful runs, edge count correlates more strongly with solve time than
-region count ($\rho=0.982$ versus $\rho=0.839$). VCC produces higher median
-minimum clearance in every successful family but does not uniformly improve
-path length or traversal time. These results show that edge structure---not
-region count alone---governs GCS difficulty: ACD is a robust single-query
-default, while VCC is attractive when its construction can be amortized or it
-substantially reduces connectivity.
+Graphs of Convex Sets (GCS) with B\'ezier trajectories enable collision-free
+motion planning through convex optimization, but their practical efficiency
+depends on the free-space cover. This study compares Approximate Convex
+Decomposition (ACD) and Visibility Clique Cover (VCC) as front ends to a common
+GCS--B\'ezier pipeline. We evaluate cover-construction cost, graph and model
+size, planning time, reliability, and trajectory quality across five planar map
+families. ACD solved all 25 test instances and was faster end-to-end under the
+tested single-query configuration. VCC solved 23 instances; its failures
+occurred in narrow passages. Where visibility-based grouping reduced graph
+connectivity, VCC substantially lowered downstream GCS solve time---from
+40.10~s to 3.10~s on the \code{clustering} maps---and achieved higher median
+minimum clearance in each successful family. However, its computational benefit
+and reliability did not transfer uniformly across environments, and neither
+method consistently dominated path length or traversal time. These results
+indicate that induced edge structure is more informative than region count alone
+for assessing GCS difficulty. Within this benchmark, ACD is a robust,
+low-overhead choice for single-query planning, while VCC is most useful when it
+meaningfully reduces connectivity.
 
 \keywords{Motion planning \and Graphs of Convex Sets \and B\'ezier trajectories
 \and convex free-space decomposition \and visibility clique cover}
@@ -124,7 +123,8 @@ ACD uses local concavity to decompose polygonal free space, whereas VCC uses
 sampled visibility and convex-region inflation to seek a compact cover. These
 methods embody different trade-offs: ACD can be inexpensive to construct but may
 yield many local regions, while VCC can reduce the downstream graph but incurs
-sampling and clique-cover costs and can be sensitive to narrow passages.
+sampling, visibility-testing, and region-inflation costs and can be sensitive to
+narrow passages.
 
 The paper makes the following empirical contributions:
 \begin{itemize}
@@ -162,8 +162,38 @@ and Section~5 concludes the paper and outlines future work.
 
 %
 %
+\clearpage
 \section{Conclusion and Future Work}
-%
+
+This paper compared Approximate Convex Decomposition (ACD) and Visibility
+Clique Cover (VCC) as front ends for a common GCS--B\'ezier motion-planning
+pipeline.  The experiments show that the usefulness of a convex cover cannot
+be judged from its region count alone.  Although VCC substantially reduced the
+number of regions and GCS edges on the \code{clustering} maps, comparable
+reductions did not occur uniformly across the other environments.  Over the 48
+successful runs, edge count was a stronger graph-level predictor of solve time
+than region count.  In the tested single-query configuration, ACD solved all
+25 instances and was faster end-to-end in every map family because its
+decomposition cost was much lower.  VCC solved 23 instances, produced higher
+median minimum clearance in every successful family, and could substantially
+reduce downstream GCS time when visibility-based grouping eliminated redundant
+connectivity.  Thus, the relevant design trade-off is between total
+decomposition-and-planning cost, the connectivity induced by the cover, and
+the desired trajectory properties, rather than compactness of the cover by
+itself.
+
+Future work should test these findings on a larger and more varied benchmark,
+including additional seeds, workspace scales, obstacle densities, narrow
+passages, higher-dimensional configuration spaces, and robot geometries.
+An important next step is to evaluate repeated-query settings, where the
+one-time cost of a VCC cover may be amortized, and to study adaptive sampling,
+coverage, and region-inflation policies that explicitly control the resulting
+GCS connectivity.  It would also be useful to report richer trajectory
+measures---such as clearance distributions, smoothness, and dynamic
+feasibility---and to compare different rounding strategies or exact solvers
+when the relaxation--rounding gap is large.  Together, these extensions could
+support a principled, problem-dependent choice of free-space decomposition for
+GCS motion planning.
 
 
 % \subsubsection{Sample Heading (Third Level)} Only two levels of headings should be numbered. Lower level headings remain unnumbered; they are formatted as run-in headings.

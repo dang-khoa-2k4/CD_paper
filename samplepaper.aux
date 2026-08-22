@@ -15,62 +15,69 @@
 \citation{DeitsTedrake2023VCC}
 \@writefile{toc}{\contentsline {section}{\numberline {2}Technical Background}{2}{}\protected@file@percent }
 \newlabel{sec:technical-background}{{2}{2}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Convex Free-Space Covers for GCS--B\'ezier}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Convex Free-Space Covers and Graphs of Convex Sets}{2}{}\protected@file@percent }
 \newlabel{sec:convex-free-space}{{2.1}{2}{}{}{}}
+\newlabel{eq:convex-cover}{{1}{2}{}{}{}}
 \citation{MarcucciEtAl2023GCS,MarcucciEtAl2023MotionPlanning}
 \citation{LienAmato2006}
-\citation{DeitsTedrake2023VCC}
-\citation{DeitsTedrake2014}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Approximate Convex Decomposition}{3}{}\protected@file@percent }
 \newlabel{sec:acd}{{2.2}{3}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Visibility Clique Cover}{3}{}\protected@file@percent }
-\newlabel{sec:vcc}{{2.3}{3}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Conceptual ACD step. A convex-hull bridge exposes a concave pocket; an interior cut from its selected reflex vertex produces two convex regions with a shared interface.}}{3}{}\protected@file@percent }
+\newlabel{fig:acd-step}{{1}{3}{}{}{}}
+\citation{DeitsTedrake2023VCC}
+\citation{DeitsTedrake2014}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Visibility Clique Cover}{4}{}\protected@file@percent }
+\newlabel{sec:vcc}{{2.3}{4}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Conceptual VCC and IRIS-style inflation. Teal points and edges form a visibility clique; its seed (green) is inflated by alternating obstacle- separating hyperplanes (magenta dashed) and maximum-volume ellipsoid updates (blue), yielding the collision-free convex polytope (red).}}{4}{}\protected@file@percent }
+\newlabel{fig:vcc-inflation}{{2}{4}{}{}{}}
 \citation{MarcucciEtAl2023MotionPlanning}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Integrated GCS--B\'ezier Framework for Motion Planning}{4}{}\protected@file@percent }
-\newlabel{sec:gcs-bezier-framework}{{3}{4}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Region Graph and B\'ezier Trajectory Model}{4}{}\protected@file@percent }
-\newlabel{sec:gcs-bezier-model}{{3.1}{4}{}{}{}}
-\newlabel{eq:framework-bezier-curve}{{1}{4}{}{}{}}
-\newlabel{eq:framework-containment}{{2}{4}{}{}{}}
-\newlabel{eq:framework-kinematics}{{3}{4}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces From a convex free-space cover to a GCS. Each cover region maps to one graph vertex, and each feasible common interface maps to a directed transition. The start and goal lie in the designated source and target regions.}}{5}{}\protected@file@percent }
+\newlabel{fig:region-to-gcs}{{3}{5}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Integrated GCS--B\'ezier Framework for Motion Planning}{5}{}\protected@file@percent }
+\newlabel{sec:gcs-bezier-framework}{{3}{5}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Region Graph and B\'ezier Trajectory Model}{5}{}\protected@file@percent }
+\newlabel{sec:gcs-bezier-model}{{3.1}{5}{}{}{}}
+\newlabel{eq:framework-bezier-curve}{{2}{5}{}{}{}}
+\newlabel{eq:framework-containment}{{3}{5}{}{}{}}
+\newlabel{eq:framework-kinematics}{{4}{5}{}{}{}}
 \citation{MarcucciEtAl2023GCS}
 \citation{MarcucciEtAl2023GCS,MarcucciEtAl2023MotionPlanning}
-\newlabel{eq:framework-c0-continuity}{{4}{5}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Perspective GCS Formulation}{5}{}\protected@file@percent }
-\newlabel{sec:perspective-gcs}{{3.2}{5}{}{}{}}
-\newlabel{eq:framework-perspective-cost}{{5}{5}{}{}{}}
-\newlabel{eq:framework-gcs-micp}{{6}{5}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Convex Relaxation and Path Rounding}{5}{}\protected@file@percent }
-\newlabel{sec:gcs-relaxation-rounding}{{3.3}{5}{}{}{}}
-\newlabel{eq:framework-rounding}{{7}{6}{}{}{}}
-\newlabel{eq:framework-bounds}{{8}{6}{}{}{}}
-\newlabel{eq:framework-relaxation-gap}{{9}{6}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Experimental Results and Discussion}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Benchmark Overview}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Model Size and Runtime}{6}{}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Median model size and runtime by map family. Time is measured in seconds.}}{7}{}\protected@file@percent }
-\newlabel{tab:exp-runtime}{{1}{7}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Correlation Between Model Size and Solve Time}{7}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Relationships between model-size indicators and solve time over 48 successful runs. Log axes are used where the metric range spans several orders of magnitude.}}{8}{}\protected@file@percent }
-\newlabel{fig:exp-correlations}{{1}{8}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Trajectory Quality}{8}{}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Median trajectory-quality metrics over successful runs.}}{8}{}\protected@file@percent }
-\newlabel{tab:exp-quality}{{2}{8}{}{}{}}
+\newlabel{eq:framework-c0-continuity}{{5}{6}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Perspective GCS Formulation}{6}{}\protected@file@percent }
+\newlabel{sec:perspective-gcs}{{3.2}{6}{}{}{}}
+\newlabel{eq:framework-perspective-cost}{{6}{6}{}{}{}}
+\newlabel{eq:framework-gcs-micp}{{7}{6}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Convex Relaxation and Path Rounding}{7}{}\protected@file@percent }
+\newlabel{sec:gcs-relaxation-rounding}{{3.3}{7}{}{}{}}
+\newlabel{eq:framework-rounding}{{8}{7}{}{}{}}
+\newlabel{eq:framework-bounds}{{9}{7}{}{}{}}
+\newlabel{eq:framework-relaxation-gap}{{10}{7}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Experimental Results and Discussion}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Benchmark Overview}{7}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Model Size and Runtime}{8}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Median model size and runtime by map family. Time is measured in seconds.}}{8}{}\protected@file@percent }
+\newlabel{tab:exp-runtime}{{1}{8}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Correlation Between Model Size and Solve Time}{8}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Relationships between model-size indicators and solve time over 48 successful runs. Log axes are used where the metric range spans several orders of magnitude.}}{9}{}\protected@file@percent }
+\newlabel{fig:exp-correlations}{{4}{9}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Trajectory Quality}{9}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Median trajectory-quality metrics over successful runs.}}{10}{}\protected@file@percent }
+\newlabel{tab:exp-quality}{{2}{10}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Visual Evidence on Flappy Maps}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Discussion and Limitations}{10}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces ACD and VCC comparisons on the five \texttt  {flappy} seeds. Obstacles are black, convex regions are colored, and the GCS trajectory is plotted in blue.}}{11}{}\protected@file@percent }
+\newlabel{fig:exp-flappy}{{5}{11}{}{}{}}
 \bibstyle{splncs04}
 \bibdata{mybibliography}
 \bibcite{DeitsTedrake2014}{1}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}Visual Evidence on Flappy Maps}{9}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.6}Discussion and Limitations}{9}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion and Future Work}{9}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Acknowledgments.}{9}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces ACD and VCC comparisons on the five \texttt  {flappy} seeds. Obstacles are black, convex regions are colored, and the GCS trajectory is plotted in blue.}}{10}{}\protected@file@percent }
-\newlabel{fig:exp-flappy}{{2}{10}{}{}{}}
 \bibcite{KavrakiEtAl1996}{2}
 \bibcite{LaValle1998}{3}
 \bibcite{LienAmato2006}{4}
 \bibcite{MarcucciEtAl2023MotionPlanning}{5}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Conclusion and Future Work}{12}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Acknowledgments.}{12}{}\protected@file@percent }
 \bibcite{MarcucciEtAl2023GCS}{6}
 \bibcite{Schulman2014_TrajOpt}{7}
 \bibcite{DeitsTedrake2023VCC}{8}
 \bibcite{Zucker2013_CHOMP}{9}
-\gdef \@abspage@last{11}
+\gdef \@abspage@last{13}
